@@ -12,13 +12,15 @@
 		<builddir>/home/francesco/Eclipse_WS/lib/target</builddir>
 		<project.build.directory>/home/francesco/Eclipse_WS/textdigester/target</project.build.directory>
 		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+		<slf4j.version>1.7.23</slf4j.version>
+		<logback.version>1.2.1</logback.version>
 	</properties>
 
 	<repositories>
 		<repository>
 			<id>backingdata-repo</id>
 			<name>Backingdata repository</name>
-			<url>http://backingdata.org/dri/library/mavenRepo/</url>
+			<url>http://backingdata.org/mavenRepo/</url>
 		</repository>
 	</repositories>
 
@@ -41,7 +43,7 @@
 					<target>${jdk.version}</target>
 				</configuration>
 			</plugin>
-			
+
 			<!-- Assembly plugin -->
 			<plugin>
 				<groupId>org.apache.maven.plugins</groupId>
@@ -98,7 +100,57 @@
 					</execution>
 				</executions>
 			</plugin>
-			
+
 		</plugins>
 	</build>
+
+	<dependencies>
+
+		<!-- deeplearning4j-nlp -->
+		<dependency>
+			<groupId>org.deeplearning4j</groupId>
+			<artifactId>deeplearning4j-nlp</artifactId>
+			<version>0.7.2</version>
+		</dependency>
+
+		<!-- GATE -->
+		<dependency>
+			<groupId>uk.ac.gate</groupId>
+			<artifactId>gate-core</artifactId>
+			<version>8.3</version>
+		</dependency>
+		
+		<!-- Freeling -->
+		<dependency>
+			<groupId>edu.upc</groupId>
+			<artifactId>freeling</artifactId>
+			<version>4.0</version>
+		</dependency>
+		
+		<!-- Boilerpipe HTML -->
+		<dependency>
+			<groupId>org</groupId>
+			<artifactId>boilerpipe</artifactId>
+			<version>1.2.0</version>
+		</dependency>
+
+		<!-- Logging: slf4j + logback -->
+		<dependency>
+			<groupId>org.slf4j</groupId>
+			<artifactId>slf4j-api</artifactId>
+			<version>${slf4j.version}</version>
+		</dependency>
+
+		<dependency>
+			<groupId>ch.qos.logback</groupId>
+			<artifactId>logback-classic</artifactId>
+			<version>${logback.version}</version>
+		</dependency>
+
+		<dependency>
+			<groupId>ch.qos.logback</groupId>
+			<artifactId>logback-core</artifactId>
+			<version>${logback.version}</version>
+		</dependency>
+	</dependencies>
 </project>
