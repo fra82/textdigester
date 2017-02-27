@@ -16,9 +16,8 @@ In order to import text digester in your program:
 * Modify the property file of TextDigester by specifying the local path to the resource folder of TextDigester (downloaded in the previous tar.gz file) and the local path of your GATE installation  
 
 Before using TextDigester library methods, remember to set the path to the property file of TextDigester by means of the following code:   
+
 ```javascript
 edu.upf.taln.textdigester.setting.PropertyManager.setPropertyFilePath("/home/francesco/Desktop/NLP_HACHATHON_4YFN/TextDigesterConfig.properties");
-```  
-
-
+```
 
