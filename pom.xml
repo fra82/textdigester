@@ -3,7 +3,7 @@
 	<modelVersion>4.0.0</modelVersion>
 	<groupId>edu.upf.taln</groupId>
 	<artifactId>textdigester</artifactId>
-	<version>0.0.1</version>
+	<version>0.0.2</version>
 	<name>TextDigester: Automatic Summarization</name>
 	<description>Utilities and tools for automated text summarization</description>
 
