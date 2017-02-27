@@ -1,3 +1,6 @@
+/**
+ * TextDigester: Document Summarization Framework
+ */
 package edu.upf.taln.textdigester.server;
 
 
@@ -11,6 +14,11 @@ import org.eclipse.jetty.servlet.ServletContextHandler;
 
 import edu.upf.taln.textdigester.server.servlet.TextDigesterSrv;
 
+/**
+ * 
+ * @author Francesco Ronzano
+ *
+ */
 public class DemoServer {
 	
 	public static void main( String[] args ) throws Exception {

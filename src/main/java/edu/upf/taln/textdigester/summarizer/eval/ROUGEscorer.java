@@ -1,3 +1,6 @@
+/**
+ * TextDigester: Document Summarization Framework
+ */
 package edu.upf.taln.textdigester.summarizer.eval;
 
 import java.util.ArrayList;
@@ -16,7 +19,11 @@ import gate.Annotation;
 import gate.Document;
 import gate.util.InvalidOffsetException;
 
-
+/**
+ * 
+ * @author Francesco Ronzano
+ *
+ */
 public class ROUGEscorer {
 
 	// ID of the summary we are genrating

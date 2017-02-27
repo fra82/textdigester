@@ -1,3 +1,6 @@
+/**
+ * TextDigester: Document Summarization Framework
+ */
 package edu.upf.taln.textdigester.example;
 
 import java.io.BufferedWriter;
@@ -21,6 +24,11 @@ import edu.upf.taln.textdigester.setting.LangENUM;
 import edu.upf.taln.textdigester.setting.PropertyManager;
 import gate.AnnotationSet;
 
+/**
+ * 
+ * @author Francesco Ronzano
+ *
+ */
 public class ParseDocumentExample {
 
 	private static final Logger logger = LoggerFactory.getLogger(ParseDocumentExample.class);

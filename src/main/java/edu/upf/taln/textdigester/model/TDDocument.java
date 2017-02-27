@@ -1,3 +1,6 @@
+/**
+ * TextDigester: Document Summarization Framework
+ */
 package edu.upf.taln.textdigester.model;
 
 import java.util.ArrayList;
@@ -15,6 +18,11 @@ import gate.Document;
 import gate.Factory;
 import gate.creole.ResourceInstantiationException;
 
+/**
+ * 
+ * @author Francesco Ronzano
+ *
+ */
 public class TDDocument {
 	
 	private static Random rnd = new Random();

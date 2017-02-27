@@ -1,3 +1,6 @@
+/**
+ * TextDigester: Document Summarization Framework
+ */
 package edu.upf.taln.textdigester.summarizer.txtvect;
 
 import org.nd4j.linalg.api.ndarray.INDArray;
@@ -12,6 +15,11 @@ import edu.upf.taln.textdigester.setting.LangENUM;
 import edu.upf.taln.textdigester.setting.exception.TextDigesterException;
 import gate.Annotation;
 
+/**
+ * 
+ * @author Francesco Ronzano
+ *
+ */
 public class EmbeddingVectorWiki {
 	
 	private static final Logger logger = LoggerFactory.getLogger(TFIDFVectorWiki.class);

@@ -1,3 +1,6 @@
+/**
+ * TextDigester: Document Summarization Framework
+ */
 package edu.upf.taln.textdigester.resource.gate;
 
 import java.io.File;
@@ -21,6 +24,11 @@ import gate.AnnotationSet;
 import gate.Document;
 import gate.Gate;
 
+/**
+ * 
+ * @author Francesco Ronzano
+ *
+ */
 public class GtUtils {
 
 	private static boolean isInitialized = false;

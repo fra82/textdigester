@@ -1,3 +1,6 @@
+/**
+ * TextDigester: Document Summarization Framework
+ */
 package edu.upf.taln.textdigester.setting;
 
 import java.io.File;
@@ -12,7 +15,11 @@ import org.slf4j.LoggerFactory;
 
 import edu.upf.taln.textdigester.setting.exception.TextDigesterException;
 
-
+/**
+ * 
+ * @author Francesco Ronzano
+ *
+ */
 public class PropertyManager {
 	
 	public static final String resourceFolder_fullPath = "resourceFolder.fullPath";

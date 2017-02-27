@@ -1,3 +1,6 @@
+/**
+ * TextDigester: Document Summarization Framework
+ */
 package edu.upf.taln.textdigester.importer;
 
 import java.net.URL;
@@ -9,6 +12,11 @@ import de.l3s.boilerpipe.extractors.ArticleExtractor;
 import edu.upf.taln.textdigester.model.TDDocument;
 import edu.upf.taln.textdigester.setting.exception.TextDigesterException;
 
+/**
+ * 
+ * @author Francesco Ronzano
+ *
+ */
 public class HTMLimporter {
 
 	private static final Logger logger = LoggerFactory.getLogger(HTMLimporter.class);

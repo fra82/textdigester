@@ -1,3 +1,6 @@
+/**
+ * TextDigester: Document Summarization Framework
+ */
 package edu.upf.taln.textdigester.resource.freeling;
 
 import java.io.File;
@@ -49,6 +52,11 @@ import gate.corpora.CorpusImpl;
 import gate.creole.ExecutionException;
 import gate.util.InvalidOffsetException;
 
+/**
+ * 
+ * @author Francesco Ronzano
+ *
+ */
 public class FlProcessor {
 
 	private static final Logger logger = LoggerFactory.getLogger(FlProcessor.class);

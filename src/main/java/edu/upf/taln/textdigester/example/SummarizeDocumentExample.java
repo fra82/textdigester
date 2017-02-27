@@ -1,3 +1,7 @@
+/**
+ * TextDigester: Document Summarization Framework
+ */
+
 package edu.upf.taln.textdigester.example;
 
 import java.io.BufferedWriter;
@@ -28,6 +32,11 @@ import edu.upf.taln.textdigester.summarizer.SummarizationMethodENUM;
 import edu.upf.taln.textdigester.summarizer.summa.CallSUMMA;
 import gate.Annotation;
 
+/**
+ * 
+ * @author Francesco Ronzano
+ *
+ */
 public class SummarizeDocumentExample {
 
 	private static final Logger logger = LoggerFactory.getLogger(SummarizeDocumentExample.class);

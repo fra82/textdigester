@@ -1,3 +1,6 @@
+/**
+ * TextDigester: Document Summarization Framework
+ */
 package edu.upf.taln.textdigester.importer;
 
 import java.io.BufferedWriter;
@@ -31,7 +34,11 @@ import edu.upf.taln.textdigester.model.TDDocument;
 import edu.upf.taln.textdigester.resource.gate.GtUtils;
 import gate.Factory;
 
-
+/**
+ * 
+ * @author Francesco Ronzano
+ *
+ */
 public class TDXMLimporter {
 
 	private static final Logger logger = LoggerFactory.getLogger(HTMLimporter.class);

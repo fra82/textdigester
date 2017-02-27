@@ -1,3 +1,6 @@
+/**
+ * TextDigester: Document Summarization Framework
+ */
 package edu.upf.taln.textdigester.example;
 
 import java.io.BufferedWriter;
@@ -26,6 +29,11 @@ import edu.upf.taln.textdigester.summarizer.method.SentenceSimilarityENUM;
 import edu.upf.taln.textdigester.summarizer.method.lexrank.LexRankSummarizer;
 import gate.Annotation;
 
+/**
+ * 
+ * @author Francesco Ronzano
+ *
+ */
 public class ParseMultiLingDocumentExample {
 
 	private static final Logger logger = LoggerFactory.getLogger(ParseMultiLingDocumentExample.class);

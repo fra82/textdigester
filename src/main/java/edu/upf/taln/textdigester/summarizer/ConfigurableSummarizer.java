@@ -1,3 +1,6 @@
+/**
+ * TextDigester: Document Summarization Framework
+ */
 package edu.upf.taln.textdigester.summarizer;
 
 import java.util.Map;
@@ -12,6 +15,11 @@ import edu.upf.taln.textdigester.summarizer.method.lexrank.LexRankSummarizer;
 import edu.upf.taln.textdigester.summarizer.summa.CallSUMMA;
 import gate.Annotation;
 
+/**
+ * 
+ * @author Francesco Ronzano
+ *
+ */
 public class ConfigurableSummarizer {
 
 	public static Map<Annotation, Double> summarize(TDDocument doc, LangENUM lang, SummarizationMethodENUM approach) throws TextDigesterException {

@@ -1,3 +1,6 @@
+/**
+ * TextDigester: Document Summarization Framework
+ */
 package edu.upf.taln.textdigester.setting;
 
 import java.util.Collections;
@@ -13,6 +16,11 @@ import java.util.stream.Stream;
 import org.apache.commons.lang.exception.ExceptionUtils;
 import org.slf4j.Logger;
 
+/**
+ * 
+ * @author Francesco Ronzano
+ *
+ */
 public class Util {
 
 	/**

@@ -1,7 +1,15 @@
+/**
+ * TextDigester: Document Summarization Framework
+ */
 package edu.upf.taln.textdigester.setting;
 
 import java.util.*;
 
+/**
+ * 
+ * @author Francesco Ronzano
+ *
+ */
 public class MapUtil {
 
 	public static <K, V extends Comparable<? super V>> Map<K, V> sortByValue( Map<K, V> map ) {

@@ -1,3 +1,6 @@
+/**
+ * TextDigester: Document Summarization Framework
+ */
 package edu.upf.taln.textdigester.summarizer.txtvect;
 
 import java.util.HashMap;
@@ -19,6 +22,11 @@ import edu.upf.taln.textdigester.setting.LangENUM;
 import edu.upf.taln.textdigester.setting.exception.TextDigesterException;
 import gate.Annotation;
 
+/**
+ * 
+ * @author Francesco Ronzano
+ *
+ */
 public class TFIDFVectorWiki {
 
 	private static final Logger logger = LoggerFactory.getLogger(TFIDFVectorWiki.class);

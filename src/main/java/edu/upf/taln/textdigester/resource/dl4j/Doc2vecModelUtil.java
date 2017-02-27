@@ -1,3 +1,6 @@
+/**
+ * TextDigester: Document Summarization Framework
+ */
 package edu.upf.taln.textdigester.resource.dl4j;
 
 import java.io.BufferedReader;
@@ -34,13 +37,16 @@ import edu.upf.taln.textdigester.model.TDDocument;
 import edu.upf.taln.textdigester.resource.freeling.FlProcessor;
 import edu.upf.taln.textdigester.resource.gate.GtUtils;
 import edu.upf.taln.textdigester.setting.LangENUM;
-import edu.upf.taln.textdigester.setting.PropertyManager;
-import edu.upf.taln.textdigester.setting.exception.TextDigesterException;
 import gate.Annotation;
 import gate.AnnotationSet;
 import gate.Document;
 import gate.Factory;
 
+/**
+ * 
+ * @author Francesco Ronzano
+ *
+ */
 public class Doc2vecModelUtil {
 
 	private static final Logger logger = LoggerFactory.getLogger(Doc2vecModelUtil.class);

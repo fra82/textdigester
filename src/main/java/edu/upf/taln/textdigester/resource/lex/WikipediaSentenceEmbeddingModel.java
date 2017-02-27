@@ -1,3 +1,6 @@
+/**
+ * TextDigester: Document Summarization Framework
+ */
 package edu.upf.taln.textdigester.resource.lex;
 
 import java.io.File;
@@ -22,6 +25,11 @@ import edu.upf.taln.textdigester.setting.LangENUM;
 import edu.upf.taln.textdigester.setting.PropertyManager;
 import edu.upf.taln.textdigester.setting.exception.TextDigesterException;
 
+/**
+ * 
+ * @author Francesco Ronzano
+ *
+ */
 public class WikipediaSentenceEmbeddingModel {
 
 	private static final Logger logger = LoggerFactory.getLogger(WikipediaSentenceEmbeddingModel.class);

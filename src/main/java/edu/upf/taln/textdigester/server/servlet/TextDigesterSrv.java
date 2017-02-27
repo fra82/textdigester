@@ -1,3 +1,6 @@
+/**
+ * TextDigester: Document Summarization Framework
+ */
 package edu.upf.taln.textdigester.server.servlet;
 
 import java.io.IOException;
@@ -8,6 +11,11 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+/**
+ * 
+ * @author Francesco Ronzano
+ *
+ */
 public class TextDigesterSrv extends HttpServlet {
 	
 	private static final long serialVersionUID = 1L;

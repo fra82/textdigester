@@ -1,3 +1,6 @@
+/**
+ * TextDigester: Document Summarization Framework
+ */
 package edu.upf.taln.textdigester.example;
 
 import java.net.URL;
@@ -11,6 +14,11 @@ import edu.upf.taln.textdigester.importer.TDXMLimporter;
 import edu.upf.taln.textdigester.model.TDDocument;
 import edu.upf.taln.textdigester.setting.PropertyManager;
 
+/**
+ * 
+ * @author Francesco Ronzano
+ *
+ */
 public class LoadDocumentExample {
 	
 	private static final Logger logger = LoggerFactory.getLogger(LoadDocumentExample.class);

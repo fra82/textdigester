@@ -1,3 +1,6 @@
+/**
+ * TextDigester: Document Summarization Framework
+ */
 package edu.upf.taln.textdigester;
 
 import java.net.URL;
@@ -17,6 +20,11 @@ import edu.upf.taln.textdigester.summarizer.SummarizationMethodENUM;
 import edu.upf.taln.textdigester.summarizer.util.SummaryUtil;
 import gate.Annotation;
 
+/**
+ * 
+ * @author Francesco Ronzano
+ *
+ */
 public class CoreExample {
 	
 	private static final Logger logger = LoggerFactory.getLogger(CoreExample.class);
