@@ -40,6 +40,11 @@ public class CoreExample {
 
 		HTMLdoc = FlProcessor.parseDocumentGTSentences(HTMLdoc, languageOfHTMLdoc);
 		
+		String myText = "Here you can load the text to summarize";
+		LangENUM lang = LangENUM.Catalan; // Supported languages: Catalan, English, Spanish
+		TDDocument myDoc = FlProcessor.generateDocumentFromFreeText(myText, "Name_of_the_docment_or_null_to_autogenerate", lang);
+		
+				
 		/* Try different summarization methods that return a map with key a sentence Annotation instance and value the relevance score assigned to that sentence
 		 * List of summarization methods available - in the class: edu.upf.taln.textdigester.summarizer.SummarizationMethodENUM */
 		
