@@ -12,6 +12,7 @@ import edu.upf.taln.textdigester.setting.exception.TextDigesterException;
 import edu.upf.taln.textdigester.summarizer.method.SentenceSimilarityENUM;
 import edu.upf.taln.textdigester.summarizer.method.centroid.CentroidSummarizer;
 import edu.upf.taln.textdigester.summarizer.method.lexrank.LexRankSummarizer;
+import edu.upf.taln.textdigester.summarizer.method.multi.centroid.CentroidSummarizerMulti;
 import edu.upf.taln.textdigester.summarizer.summa.CallSUMMA;
 import gate.Annotation;
 
@@ -49,12 +50,19 @@ public class ConfigurableSummarizer {
 			
 		case FirstSim:
 			return GtUtils.orderSentencesBySentFeatValue(doc.getGATEdoc(), "first_sim");
+		
+		case TFscore:
+			return GtUtils.orderSentencesBySentFeatValue(doc.getGATEdoc(), "tf_score");
+			
+		case Position:
+			return GtUtils.orderSentencesBySentFeatValue(doc.getGATEdoc(), "position");
+			
+		case Centroid_TFIDF_SUMMA:
+			return GtUtils.orderSentencesBySentFeatValue(doc.getGATEdoc(), "sent_doc_sim");
 			
 		case SemScore:
 			return GtUtils.orderSentencesBySentFeatValue(doc.getGATEdoc(), "sem_score");
 			
-		case NEScore:
-			return GtUtils.orderSentencesBySentFeatValue(doc.getGATEdoc(), "NE_score");
 		}
 
 		return null;

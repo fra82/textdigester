@@ -37,6 +37,7 @@ import edu.upf.taln.textdigester.model.TDDocument;
 import edu.upf.taln.textdigester.resource.freeling.FlProcessor;
 import edu.upf.taln.textdigester.resource.gate.GtUtils;
 import edu.upf.taln.textdigester.setting.LangENUM;
+import edu.upf.taln.textdigester.setting.PropertyManager;
 import gate.Annotation;
 import gate.AnnotationSet;
 import gate.Document;
@@ -52,23 +53,28 @@ public class Doc2vecModelUtil {
 	private static final Logger logger = LoggerFactory.getLogger(Doc2vecModelUtil.class);
 
 	public static void main(String[] args) {
+		PropertyManager.setPropertyFilePath(PropertyManager.defaultPropertyFilePath);
+		
 		// STEP 1: pre-processing
-		// prepareFiles("/home/francesco/Downloads/raw.ca");
+		// prepareFiles("/home/francesco/Desktop/NLP_HACHATHON_4YFN/RAW_WIKIPEDIA/raw.es", LangENUM.Spanish, false, false);
 
 		// STEP 2: generated doc2Vec
-		// generateDoc2VecModel("/home/francesco/Downloads/raw.ca/PROCESSED_SAMPLE", "/home/francesco/Downloads/raw.ca/PROCESSED_SAMPLE/par2vec_model_v1.zip");
-		// generateDocFromWord2VecModel("/home/francesco/Downloads/raw.ca/PROCESSED_SAMPLE", "/home/francesco/Downloads/raw.ca/PROCESSED_SAMPLE", "/home/francesco/Downloads/raw.ca/parw2vec_model_v1.zip");
+		// generateDoc2VecModel("/home/francesco/Desktop/NLP_HACHATHON_4YFN/RAW_WIKIPEDIA/raw.ca/PROCESSED_SAMPLE", "/home/francesco/Desktop/NLP_HACHATHON_4YFN/RAW_WIKIPEDIA/raw.ca/PROCESSED_SAMPLE/par2vec_model_v1.zip");
+		
+		// generateDocFromWord2VecModel("/home/francesco/Desktop/NLP_HACHATHON_4YFN/RAW_WIKIPEDIA/raw.ca/PROCESSED_SAMPLE", "/home/francesco/Desktop/NLP_HACHATHON_4YFN/RAW_WIKIPEDIA/raw.ca/PROCESSED_SAMPLE", "/home/francesco/Desktop/NLP_HACHATHON_4YFN/RAW_WIKIPEDIA/raw.ca/cawiki_parw2vec.zip");
+		// generateDocFromWord2VecModel("/home/francesco/Desktop/NLP_HACHATHON_4YFN/RAW_WIKIPEDIA/raw.en/PROCESSED_SAMPLE", "/home/francesco/Desktop/NLP_HACHATHON_4YFN/RAW_WIKIPEDIA/raw.en/PROCESSED_SAMPLE", "/home/francesco/Desktop/NLP_HACHATHON_4YFN/RAW_WIKIPEDIA/raw.en/enwiki_parw2vec.zip");
+		generateDocFromWord2VecModel("/home/francesco/Desktop/NLP_HACHATHON_4YFN/RAW_WIKIPEDIA/raw.es/PROCESSED_SAMPLE", "/home/francesco/Desktop/NLP_HACHATHON_4YFN/RAW_WIKIPEDIA/raw.es/PROCESSED_SAMPLE", "/home/francesco/Desktop/NLP_HACHATHON_4YFN/RAW_WIKIPEDIA/raw.es/eswiki_parw2vec.zip");
 
 		// STEP 3: eval sentence
-		
+		/*
 		long start = System.currentTimeMillis();
-		INDArray vector = loadDoc2VecModelAndEvalVect("/home/francesco/Downloads/raw.ca/parw2vec_model_v1.zip",
+		INDArray vector = loadDoc2VecModelAndEvalVect("/home/francesco/Desktop/NLP_HACHATHON_4YFN/RAW_WIKIPEDIA/raw.ca/parw2vec_model_v1.zip",
 				"L'exconseller de la Presidència farà notar aquest dilluns al Tribunal Suprem la \"contradicció\" de la fiscalia: \"En funció de les idees, les coses poden ser motiu d'arxivament o un delicte molt greu",
 				false, false, LangENUM.Catalan);
 
 		System.out.println("Loading time: " + (System.currentTimeMillis() - start));
 		System.out.println("VECTOR: " + vector.toString());
-		
+		*/
 	}	
 
 

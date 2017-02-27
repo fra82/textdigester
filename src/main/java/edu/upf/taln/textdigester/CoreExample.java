@@ -26,9 +26,9 @@ import gate.Annotation;
  *
  */
 public class CoreExample {
-	
+
 	private static final Logger logger = LoggerFactory.getLogger(CoreExample.class);
-	
+
 	public static void main(String[] args) {
 		/* Load property file */
 		PropertyManager.setPropertyFilePath("/home/francesco/Desktop/NLP_HACHATHON_4YFN/TextDigesterConfig.properties");
@@ -47,50 +47,57 @@ public class CoreExample {
 		LangENUM languageOfHTMLdoc = FlProcessor.getLanguage(HTMLdoc.getOriginalText());
 
 		HTMLdoc = FlProcessor.parseDocumentGTSentences(HTMLdoc, languageOfHTMLdoc);
-		
+
 		String myText = "Here you can load the text to summarize";
 		LangENUM lang = LangENUM.Catalan; // Supported languages: Catalan, English, Spanish
 		TDDocument myDoc = FlProcessor.generateDocumentFromFreeText(myText, "Name_of_the_docment_or_null_to_autogenerate", lang);
-		
-				
+
+
 		/* Try different summarization methods that return a map with key a sentence Annotation instance and value the relevance score assigned to that sentence
 		 * List of summarization methods available - in the class: edu.upf.taln.textdigester.summarizer.SummarizationMethodENUM */
-		
+
 		try {
+
 			// Summarization method: Centroid_TFIDF
 			Map<Annotation, Double> orderedSentences_Centroid_TFIDF = ConfigurableSummarizer.summarize(HTMLdoc, languageOfHTMLdoc, SummarizationMethodENUM.Centroid_TFIDF);
-			
+
 			// Summarization method: Centroid_EMBED
 			Map<Annotation, Double> orderedSentences_Centroid_EMBED = ConfigurableSummarizer.summarize(HTMLdoc, languageOfHTMLdoc, SummarizationMethodENUM.Centroid_EMBED);
-			
+
 			// Summarization method: TextRank_TFIDF
 			Map<Annotation, Double> orderedSentences_TextRank_TFIDF = ConfigurableSummarizer.summarize(HTMLdoc, languageOfHTMLdoc, SummarizationMethodENUM.TextRank_TFIDF);
-			
+
 			// Summarization method: TextRank_EMBED
 			Map<Annotation, Double> orderedSentences_TextRank_EMBED = ConfigurableSummarizer.summarize(HTMLdoc, languageOfHTMLdoc, SummarizationMethodENUM.TextRank_EMBED);
-			
+
 			// Summarization method: FirstSim
 			Map<Annotation, Double> orderedSentences_FirstSim = ConfigurableSummarizer.summarize(HTMLdoc, languageOfHTMLdoc, SummarizationMethodENUM.FirstSim);
-			
-			// Summarization method: NEScore
-			Map<Annotation, Double> orderedSentences_NEScore = ConfigurableSummarizer.summarize(HTMLdoc, languageOfHTMLdoc, SummarizationMethodENUM.NEScore);
-			
+
+			// Summarization method: TFscore
+			Map<Annotation, Double> orderedSentences_TFscore = ConfigurableSummarizer.summarize(HTMLdoc, languageOfHTMLdoc, SummarizationMethodENUM.TFscore);
+
+			// Summarization method: Centroid_TFIDF_SUMMA
+			Map<Annotation, Double> orderedSentences_Centroid_TFIDF_SUMMA = ConfigurableSummarizer.summarize(HTMLdoc, languageOfHTMLdoc, SummarizationMethodENUM.Centroid_TFIDF_SUMMA);
+
+			// Summarization method: Position
+			Map<Annotation, Double> orderedSentences_Position = ConfigurableSummarizer.summarize(HTMLdoc, languageOfHTMLdoc, SummarizationMethodENUM.Position);
+
 			// Summarization method: SemScore
 			Map<Annotation, Double> orderedSentences_SemScore = ConfigurableSummarizer.summarize(HTMLdoc, languageOfHTMLdoc, SummarizationMethodENUM.SemScore);
-			
+
 			// Print the text of one of these summaries
 			Map<Annotation, Double> orderedSentences_SemScore_top20perc = SummaryUtil.getSummary(orderedSentences_SemScore, HTMLdoc, 20d);
 			System.out.println("SUMMARY: \n " + SummaryUtil.getStringSummaryText(orderedSentences_SemScore_top20perc, HTMLdoc));
-			
-			
-			
-			
+
+
+
+
 		} catch (TextDigesterException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
-		
-		
+
+
 
 	}
 

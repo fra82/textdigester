@@ -1,7 +1,9 @@
-package edu.upf.taln.textdigester.summarizer.method.centroid;
+package edu.upf.taln.textdigester.summarizer.method.multi.centroid;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Iterator;
+import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
 
@@ -15,7 +17,7 @@ import edu.upf.taln.textdigester.resource.gate.GtUtils;
 import edu.upf.taln.textdigester.setting.LangENUM;
 import edu.upf.taln.textdigester.setting.MapUtil;
 import edu.upf.taln.textdigester.setting.exception.TextDigesterException;
-import edu.upf.taln.textdigester.summarizer.method.ExtractiveSummarizer;
+import edu.upf.taln.textdigester.summarizer.method.ExtractiveSummarizerMulti;
 import edu.upf.taln.textdigester.summarizer.method.SentenceSimilarityENUM;
 import edu.upf.taln.textdigester.summarizer.txtvect.EmbeddingVectorWiki;
 import edu.upf.taln.textdigester.summarizer.txtvect.TFIDFVectorWiki;
@@ -29,7 +31,7 @@ import gate.Document;
  * @author Francesco Ronzano
  *
  */
-public class CentroidSummarizer implements ExtractiveSummarizer {
+public class CentroidSummarizerMulti implements ExtractiveSummarizerMulti {
 
 	private static final Logger logger = LoggerFactory.getLogger(TFIDFVectorWiki.class);
 
@@ -39,7 +41,9 @@ public class CentroidSummarizer implements ExtractiveSummarizer {
 
 	private TFIDFVectorWiki TFIDFcomput;
 	
-	public CentroidSummarizer(LangENUM langIN, SentenceSimilarityENUM simMethod) throws TextDigesterException {
+
+
+	public CentroidSummarizerMulti(LangENUM langIN, SentenceSimilarityENUM simMethod) throws TextDigesterException {
 		if(langIN == null) {
 			throw new TextDigesterException("Specify a language to load a tfidf word list and stopword list.");
 		}
@@ -65,31 +69,44 @@ public class CentroidSummarizer implements ExtractiveSummarizer {
 
 
 	@Override
-	public Map<Annotation, Double> sortSentences(TDDocument doc) {
+	public Map<Map.Entry<Annotation, TDDocument>, Double> sortSentences(List<TDDocument> docList) {
 
 		GtUtils.initGate();
 
 		// Read the document to summarize
-		Document gateDoc = doc.getGATEdoc();
-
-		Map<Annotation, Double> retMap = new HashMap<Annotation, Double>();
+		List<Document> gateDocList = new ArrayList<Document>();
+		for(TDDocument doc : docList) {
+			gateDocList.add(doc.getGATEdoc());
+		}
+		
+		Map<Annotation, Document> annotDocMap = new HashMap<Annotation, Document>();
+		Map<Annotation, TDDocument> annotTDDocMap = new HashMap<Annotation, TDDocument>();
+		
+		Map<Map.Entry<Annotation, TDDocument>, Double> retMap = new HashMap<Map.Entry<Annotation, TDDocument>, Double>();
 
 		Map<Integer, Annotation> sentenceIDannotationMap = new HashMap<Integer, Annotation>();
 
 		// Getting all sentences of the document that could be potentially included in the summary 
-		AnnotationSet sentencesAnnotationSet = gateDoc.getAnnotations(TDDocument.mainAnnSet).get(TDDocument.sentenceAnnType);
-		if(sentencesAnnotationSet == null || sentencesAnnotationSet.size() < 1) {
-			logger.error(">>> NO SENTENCES SELECTED TO GENERATE THE SUMMARY");
-			return null;
-		}
-
-		Iterator<Annotation> sentenceAnnotations = sentencesAnnotationSet.iterator();
-		while(sentenceAnnotations.hasNext()) {
-			Annotation sentenceAnnotation = sentenceAnnotations.next();
-			if(sentenceAnnotation != null) {
-				sentenceIDannotationMap.put(sentenceAnnotation.getId(), sentenceAnnotation);
+		Integer sentID = 0;
+		for(TDDocument TDdoc : docList) {
+			AnnotationSet sentencesAnnotationSet = TDdoc.getGATEdoc().getAnnotations(TDDocument.mainAnnSet).get(TDDocument.sentenceAnnType);
+			if(sentencesAnnotationSet == null || sentencesAnnotationSet.size() < 1) {
+				logger.error(">>> NO SENTENCES SELECTED TO GENERATE THE SUMMARY");
+				continue;
+			}
+			
+			Iterator<Annotation> sentenceAnnotations = sentencesAnnotationSet.iterator();
+			while(sentenceAnnotations.hasNext()) {
+				Annotation sentenceAnnotation = sentenceAnnotations.next();
+				if(sentenceAnnotation != null) {
+					sentenceIDannotationMap.put(sentID, sentenceAnnotation);
+					sentID++;
+					annotDocMap.put(sentenceAnnotation, TDdoc.getGATEdoc());
+					annotTDDocMap.put(sentenceAnnotation, TDdoc);
+				}
 			}
 		}
+		
 
 		switch(sentSimilarity) {
 		case cosineTFIDF:
@@ -107,7 +124,7 @@ public class CentroidSummarizer implements ExtractiveSummarizer {
 			Double count_TFIDF = 0d;
 			for(Entry<Integer, Annotation> sentenceIDannotationMapEntry : sentenceIDannotationMap.entrySet()) {
 				if(sentenceIDannotationMapEntry.getValue() != null) {
-					Map<String, Double> vect = tfidfGen.computeTFIDFvect(sentenceIDannotationMapEntry.getValue(), doc);
+					Map<String, Double> vect = tfidfGen.computeTFIDFvect(sentenceIDannotationMapEntry.getValue(), annotTDDocMap.get(sentenceIDannotationMapEntry.getValue()));
 					if(vect != null) {
 						sentenceIDvectorMap_TFIDF.put(sentenceIDannotationMapEntry.getKey(), vect);
 						count_TFIDF++;
@@ -133,7 +150,7 @@ public class CentroidSummarizer implements ExtractiveSummarizer {
 			
 			for(Entry<Integer, Map<String, Double>> sentenceIDvectorMap_TFIDFEntry : sentenceIDvectorMap_TFIDF.entrySet()) {
 				try {
-					retMap.put(sentenceIDannotationMap.get(sentenceIDvectorMap_TFIDFEntry.getKey()), 
+					retMap.put(new MyEntry<Annotation, TDDocument>(sentenceIDannotationMap.get(sentenceIDvectorMap_TFIDFEntry.getKey()), annotTDDocMap.get(sentenceIDannotationMap.get(sentenceIDvectorMap_TFIDFEntry.getKey()))), 
 							TFIDFcomput.cosSimTFIDF(cetroid_TFIDF, sentenceIDvectorMap_TFIDFEntry.getValue()));
 				}
 				catch(Exception e) {
@@ -149,7 +166,7 @@ public class CentroidSummarizer implements ExtractiveSummarizer {
 			Double count = 0d;
 			for(Entry<Integer, Annotation> sentenceIDannotationMapEntry : sentenceIDannotationMap.entrySet()) {
 				if(sentenceIDannotationMapEntry.getValue() != null) {
-					INDArray vect = EmbeddingVectorWiki.computeEmbeddingVect(sentenceIDannotationMapEntry.getValue(), doc, lang);
+					INDArray vect = EmbeddingVectorWiki.computeEmbeddingVect(sentenceIDannotationMapEntry.getValue(), annotTDDocMap.get(sentenceIDannotationMapEntry.getValue()), lang);
 					if(vect != null) {
 						sentenceIDvectorMap_EMBEDDING.put(sentenceIDannotationMapEntry.getKey(), vect);
 						count++;
@@ -170,7 +187,7 @@ public class CentroidSummarizer implements ExtractiveSummarizer {
 
 			for(Entry<Integer, INDArray> sentenceIDvectorMap_EMBEDDINGEntry : sentenceIDvectorMap_EMBEDDING.entrySet()) {
 				try {
-					retMap.put(sentenceIDannotationMap.get(sentenceIDvectorMap_EMBEDDINGEntry.getKey()), 
+					retMap.put(new MyEntry<Annotation, TDDocument>(sentenceIDannotationMap.get(sentenceIDvectorMap_EMBEDDINGEntry.getKey()), annotTDDocMap.get(sentenceIDannotationMap.get(sentenceIDvectorMap_EMBEDDINGEntry.getKey()))), 
 							Transforms.cosineSim(centroid, sentenceIDvectorMap_EMBEDDINGEntry.getValue()));
 				}
 				catch(Exception e) {
