@@ -3,7 +3,9 @@
  */
 package edu.upf.taln.textdigester.summarizer;
 
+import java.util.List;
 import java.util.Map;
+import java.util.Map.Entry;
 
 import edu.upf.taln.textdigester.model.TDDocument;
 import edu.upf.taln.textdigester.resource.gate.GtUtils;
@@ -32,11 +34,11 @@ public class ConfigurableSummarizer {
 		CallSUMMA.analyze(doc.getGATEdoc(), lang);
 		
 		switch(approach) {
-		case TextRank_TFIDF:
+		case LexRank_TFIDF:
 			LexRankSummarizer lexRank_TFIDF = new LexRankSummarizer(lang, SentenceSimilarityENUM.cosineTFIDF, false, 0.01);
 			return lexRank_TFIDF.sortSentences(doc);
 
-		case TextRank_EMBED:
+		case LexRank_EMBED:
 			LexRankSummarizer lexRank_EMBED = new LexRankSummarizer(lang, SentenceSimilarityENUM.cosineEMBED, false, 0.01);
 			return lexRank_EMBED.sortSentences(doc);
 
@@ -66,6 +68,32 @@ public class ConfigurableSummarizer {
 		}
 
 		return null;
+	}
+	
+	public static Map<Entry<Annotation, TDDocument>, Double> summarizeMultiDoc(List<TDDocument> docList, LangENUM lang, SummarizationMethodENUM approach) throws TextDigesterException {
+
+		if(docList == null || lang == null || docList.size() == 0) {
+			throw new TextDigesterException("Parameter error");
+		}
+		
+		for(TDDocument doc : docList) {
+			CallSUMMA.analyze(doc.getGATEdoc(), lang);
+		}
+		
+		switch(approach) {
+		case CentroidMultiDoc_TFIDF:
+			CentroidSummarizerMulti lexRank_CentroidMultiDoc_TFIDF = new CentroidSummarizerMulti(lang, SentenceSimilarityENUM.cosineTFIDF);
+			return lexRank_CentroidMultiDoc_TFIDF.sortSentences(docList);
+
+		case CentoridMultiDoc_EMDBED:
+			CentroidSummarizerMulti lexRank_CentoridMultiDoc_EMDBED = new CentroidSummarizerMulti(lang, SentenceSimilarityENUM.cosineEMBED);
+			return lexRank_CentoridMultiDoc_EMDBED.sortSentences(docList);
+
+		default:
+			throw new TextDigesterException("Error in summarization method specification");
+			
+		}
+		
 	}
 
 

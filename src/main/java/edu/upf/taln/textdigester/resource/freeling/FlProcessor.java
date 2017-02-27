@@ -190,7 +190,8 @@ public class FlProcessor {
 			String language = lgid.identifyLanguage(text);
 
 			if(language == null) {
-				return null;
+				logger.error("Language not identified!!!");
+				return LangENUM.Spanish;
 			}
 			if(language.equals("en")) {
 				return LangENUM.English;
@@ -201,11 +202,13 @@ public class FlProcessor {
 			if(language.equals("ca")) {
 				return LangENUM.Catalan;
 			}
-
-			return null;
+			
+			logger.error("Language not identified!!!");
+			return LangENUM.Spanish;
 		}
 		else {
-			return null;
+			logger.error("Language not identified!!!");
+			return LangENUM.Spanish;
 		}
 	}
 

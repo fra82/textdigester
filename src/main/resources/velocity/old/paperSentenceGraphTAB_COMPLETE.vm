@@ -1,0 +1,162 @@
+## Print section content item
+#macro( sectionGraphPrint $section)
+	#if ($section && $section.sentences)
+		#if ($section && $section.id && $section.name)
+			<div class="graphSentContainer">
+				<div class="title t$section.level">
+					<a name="section-$section.id">$section.name</a>
+				</div>
+			</div>
+		#end
+		
+		#if ($cont.sectionSentencesMap.containsKey($section.id))
+			#foreach( $sectionSentence in $cont.sectionSentencesMap.get($section.id))
+				#if ($sectionSentence && $sectionSentence.id && $sectionSentence.text && $sectionSentence.rhetoricalClass)
+					#sentenceGraphPrint($sectionSentence.id $sectionSentence.text)
+				#end
+			#end
+		#end
+		
+		#if ($section.subsections && $section.subsections.size() > 0)
+			#foreach( $subsection in $section.subsections)
+				#sectionGraphPrint( $subsection )
+			#end
+		#end
+	#end
+#end
+
+#macro( sentenceGraphPrint $sentId $sentText)
+	#if ($sentId && $sentText)
+		<div class="graphSentContainer">
+			<div id="graphSent-$sentId" class="graphButton" data-sent-id="$sentId">Show</div>
+			<div id="graphSentVal-$sentId" class="graphSent">$sentText</div>
+		</div>
+		<script>
+			var dep_nodeSent_$sentId = [
+			 #foreach ($mapEntry in $cont.sentenceIdDepGraph.get($sentId).nodeNameMap.entrySet())
+			 	#if ($mapEntry)
+			 		#if ($foreach.count > 1 && $foreach.count <= $cont.sentenceIdDepGraph.get($sentId).nodeNameMap.size()) , #end
+			 		 {id: $mapEntry.key, label: '$mapEntry.value', title: '$mapEntry.value', physics: false}
+			 	#end
+			 #end
+			];
+            
+			var dep_edgeSent_$sentId = [
+				#foreach ($mapEntry in $cont.sentenceIdDepGraph.get($sentId).edgeIdMap.entrySet())
+					#if ($mapEntry)
+			 			#if ($foreach.count > 1 && $foreach.count <= $cont.sentenceIdDepGraph.get($sentId).edgeIdMap.size()) , #end 
+			 			{from: $mapEntry.value.left, to: $mapEntry.value.right, label: '$cont.sentenceIdDepGraph.get($sentId).edgeNameMap.get($mapEntry.key)', font: {align: 'middle'}} 
+			 	#end
+			#end
+			];
+			
+			var depSVO_nodeSent_$sentId = [
+			 #foreach ($mapEntry in $cont.sentenceIdDepSVOGraph.get($sentId).nodeNameMap.entrySet())
+			 	#if ($mapEntry)
+			 		#if ($foreach.count > 1 && $foreach.count <= $cont.sentenceIdDepSVOGraph.get($sentId).nodeNameMap.size()) , #end 
+			 		{id: $mapEntry.key, label: '$mapEntry.value', title: '$mapEntry.value', physics: false}
+			 	#end
+			 #end
+			];
+               
+
+			var depSVO_edgeSent_$sentId = [
+			#foreach ($mapEntry in $cont.sentenceIdDepSVOGraph.get($sentId).edgeIdMap.entrySet())
+				#if ($mapEntry)
+			 		#if ($foreach.count > 1 && $foreach.count <= $cont.sentenceIdDepSVOGraph.get($sentId).edgeIdMap.size()) , #end 
+			 		{from: $mapEntry.value.left, to: $mapEntry.value.right, label: '$cont.sentenceIdDepSVOGraph.get($sentId).edgeNameMap.get($mapEntry.key)', font: {align: 'middle'}} 
+			 	#end
+			#end
+			];
+						
+			var comp_nodeSent_$sentId = [
+			 #foreach ($mapEntry in $cont.sentenceIdCompGraph.get($sentId).nodeNameMap.entrySet())
+			 	#if ($mapEntry)
+			 		#if ($foreach.count > 1 && $foreach.count <= $cont.sentenceIdCompGraph.get($sentId).nodeNameMap.size()) , #end 
+			 		{id: $mapEntry.key, label: '$mapEntry.value', title: '$mapEntry.value', physics: false}
+			 	#end
+			 #end
+			];
+               
+
+			var comp_edgeSent_$sentId = [
+			#foreach ($mapEntry in $cont.sentenceIdCompGraph.get($sentId).edgeIdMap.entrySet())
+				#if ($mapEntry)
+			 		#if ($foreach.count > 1 && $foreach.count <= $cont.sentenceIdCompGraph.get($sentId).edgeIdMap.size()) , #end 
+			 		{from: $mapEntry.value.left, to: $mapEntry.value.right, label: '$cont.sentenceIdCompGraph.get($sentId).edgeNameMap.get($mapEntry.key)', font: {align: 'middle'}} 
+			 	#end
+			#end
+			];
+			
+			var compSVO_nodeSent_$sentId = [
+			 #foreach ($mapEntry in $cont.sentenceIdCompSVOGraph.get($sentId).nodeNameMap.entrySet())
+			 	#if ($mapEntry)
+			 		#if ($foreach.count > 1 && $foreach.count <= $cont.sentenceIdCompSVOGraph.get($sentId).nodeNameMap.size()) , #end 
+			 		{id: $mapEntry.key, label: '$mapEntry.value', title: '$mapEntry.value', physics: false}
+			 	#end
+			 #end
+			];
+               
+
+			var compSVO_edgeSent_$sentId = [
+			#foreach ($mapEntry in $cont.sentenceIdCompSVOGraph.get($sentId).edgeIdMap.entrySet())
+				#if ($mapEntry)
+			 		#if ($foreach.count > 1 && $foreach.count <= $cont.sentenceIdCompSVOGraph.get($sentId).edgeIdMap.size()) , #end 
+			 		{from: $mapEntry.value.left, to: $mapEntry.value.right, label: '$cont.sentenceIdCompSVOGraph.get($sentId).edgeNameMap.get($mapEntry.key)', font: {align: 'middle'}} 
+			 	#end
+			#end
+			];
+						
+			var SRL_nodeSent_$sentId = [
+			 #foreach ($mapEntry in $cont.sentenceIdSRLGraph.get($sentId).nodeNameMap.entrySet())
+			 	#if ($mapEntry)
+			 		#if ($foreach.count > 1 && $foreach.count <= $cont.sentenceIdSRLGraph.get($sentId).nodeNameMap.size()) , #end 
+			 		{id: $mapEntry.key, label: '$mapEntry.value', title: '$mapEntry.value', physics: false}
+			 	#end
+			 #end
+			];
+               
+
+			var SRL_edgeSent_$sentId = [
+			#foreach ($mapEntry in $cont.sentenceIdSRLGraph.get($sentId).edgeIdMap.entrySet())
+				#if ($mapEntry)
+			 		#if ($foreach.count > 1 && $foreach.count <= $cont.sentenceIdSRLGraph.get($sentId).edgeIdMap.size()) , #end 
+			 		{from: $mapEntry.value.left, to: $mapEntry.value.right, label: '$cont.sentenceIdSRLGraph.get($sentId).edgeNameMap.get($mapEntry.key)', font: {align: 'middle'}} 
+			 	#end
+			#end
+			];
+		</script>
+	#end
+#end
+
+<div id="graphViewer" title="View graph"></div>
+			<div id="graphHeader">
+				<label for="graphSelectorName">Select the type of graph: </label> 
+				<select name="graphSelectorName" id="graphSelector">
+					<option value="dep" selected="selected">Dependency graph</option>
+					<option value="depSVO">Dependency graph (SUBJECT-VERB-OBJECT)</option>
+					<option value="comp">Compact dependency graph</option>
+					<option value="compSVO">Compact dependency graph (SUBJECT-VERB-OBJECT)</option>
+					<option value="SRL">Semantic frames graph</option>
+				</select>
+				
+				<label for="vizType">Select the type of graph visualization: </label> 
+				<select name="vizType" id="vizType">
+					<option value="hierarchical" selected="selected">Hierarchical</option>
+					<option value="random">Random force</option>
+				</select>
+			</div>
+			<div class="graphSentContainer">
+				<div class="title t1">
+							Abstract
+				</div>
+			</div>
+			#foreach( $abstractSentence in $cont.abstractSentenceList)
+				#if ($abstractSentence && $abstractSentence.id && $abstractSentence.text && $abstractSentence.rhetoricalClass)
+					#sentenceGraphPrint($abstractSentence.id $abstractSentence.text)
+				#end
+			#end
+			
+			#foreach( $section in $cont.rootSectionList)
+				#sectionGraphPrint( $section )
+			#end

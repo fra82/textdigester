@@ -1,0 +1,78 @@
+<head>
+<style>
+#page-wrap {
+     width: 800px;
+     margin: 0 auto;
+     font-size: 12pt;
+}
+
+</style>
+<title>TextDigester</title>
+</head>
+<body>
+  <div id="page-wrap">
+	<div style="text-align:center;">
+    		<h1>TextDigester</h1>
+			<h2>Ubiquous Text Summarization</h2>
+			<h3>Presentado al Primer Hackathon NLP - <a href="http://www.red.es/" target="_blank">Red.es</a></h3>
+		<a href="http://taln.upf.edu/" target="_blank">Natural Language processing Group (TALN)</a><br/>
+		<a href="http://www.upf.edu/dtic" target="_blank">Universitat Pompeu Fabra</a>, Barcelona, Spain<br/>
+	</div>
+	<div style="text-align:left;border:1px black solid; margin:15px; padding:5px; font-size:100%;">
+	
+	
+	<form action="" method="post" style="margin: 10px;">
+  		Insert here the text to summarize:<br/>
+  		<textarea name="docText" rows="10" cols="90">Write your text here...</textarea><br/><br/>
+  		Select the summarization approach:<br/>
+  		<input type="radio" name="methodS" value="LexRank_TFIDF" checked />TextRank_TFIDF 1<br/>
+		<input type="radio" name="methodS" value="TextRank_EMBED" />TextRank_EMBED 2<br/>
+		<input type="radio" name="methodS" value="Centroid_TFIDF" />Centroid_TFIDF 3<br/>
+		<input type="radio" name="methodS" value="Centroid_EMBED" />Centroid_EMBED 3<br/>
+		<input type="radio" name="methodS" value="FirstSim" />FirstSim<br/>
+		<input type="radio" name="methodS" value="SemScore" />SemScore<br/>
+		<input type="radio" name="methodS" value="TFscore" />TFscore<br/>
+		<input type="radio" name="methodS" value="Position" />Position<br/>
+		<input type="radio" name="methodS" value="Centroid_TFIDF_SUMMA" />Centroid_TFIDF_SUMMA<br/><br/>
+		
+		Select the language:<br/>
+  		<input type="radio" name="langS" value="Spanish" checked />Spanish<br/>
+		<input type="radio" name="langS" value="Catalan" />Catalan<br/><br/>
+		
+		Summary length:<br/>
+  		<input type="radio" name="lengthS" value="20" checked />20% --
+		<input type="radio" name="lengthS" value="30" />30% --
+		<input type="radio" name="lengthS" value="40" />40% --
+		<input type="radio" name="lengthS" value="50" />50% --
+		<input type="radio" name="lengthS" value="60" />60% --
+		<input type="radio" name="lengthS" value="70" />70%<br/>
+		<br/>
+		<input type="submit" value="Summarize">
+	</form>
+	
+	</div>
+	
+	<div style="text-align: justify; text-justify: inter-word; border:1px red solid; margin:15px; padding:5px; font-size:100%;">
+	<h2>Summarization results</h2>
+	
+	$summary
+	
+	
+	
+	
+	#if ($summaryGenerated)
+			<br/><br/>
+			<h2>Sentence ranking:</h2>
+			<ol>
+			#foreach( $orderedSentencesStringElem in $orderedSentencesString)
+				#if ($orderedSentencesStringElem && $orderedSentencesStringElem.key && $orderedSentencesStringElem.value)
+					<li><b>SCORE</b>:&nbsp $orderedSentencesStringElem.value &nbsp - Sentence <span style="color: green;">$orderedSentencesStringElem.key</span></li>
+				#end
+			#end
+			</ol>
+	#end
+	
+	</div>
+	
+  </div>
+</body>

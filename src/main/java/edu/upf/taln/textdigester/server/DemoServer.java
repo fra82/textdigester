@@ -12,7 +12,7 @@ import org.eclipse.jetty.server.handler.DefaultHandler;
 import org.eclipse.jetty.server.handler.HandlerCollection;
 import org.eclipse.jetty.servlet.ServletContextHandler;
 
-import edu.upf.taln.textdigester.server.servlet.TextDigesterSrv;
+import edu.upf.taln.textdigester.server.servlet.SummarizePage;
 
 /**
  * 
@@ -30,7 +30,7 @@ public class DemoServer {
 
 		ServletContextHandler context = new ServletContextHandler();
 		context.setContextPath("/");
-		context.addServlet(TextDigesterSrv.class, "/textdigester");
+		context.addServlet(SummarizePage.class, "/textdigester");
 
 		HandlerCollection handlers = new HandlerCollection();
 		handlers.setHandlers(new Handler[] { context, new DefaultHandler() });
