@@ -10,13 +10,16 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import edu.upf.taln.textdigester.model.TDDocument;
+import edu.upf.taln.textdigester.resource.freeling.FlProcessor;
 import edu.upf.taln.textdigester.resource.gate.GtUtils;
 import edu.upf.taln.textdigester.setting.LangENUM;
 import edu.upf.taln.textdigester.setting.MapUtil;
+import edu.upf.taln.textdigester.setting.PropertyManager;
 import edu.upf.taln.textdigester.setting.exception.TextDigesterException;
 import edu.upf.taln.textdigester.summarizer.method.ExtractiveSummarizer;
 import edu.upf.taln.textdigester.summarizer.method.SentenceSimilarityENUM;
-import edu.upf.taln.textdigester.summarizer.txtvect.TFIDFVector;
+import edu.upf.taln.textdigester.summarizer.txtvect.EmbeddingVectorWiki;
+import edu.upf.taln.textdigester.summarizer.txtvect.TFIDFVectorWiki;
 import gate.Annotation;
 import gate.AnnotationSet;
 import gate.Document;
@@ -28,9 +31,9 @@ import gate.Document;
  *
  */
 public class LexRankSummarizer implements ExtractiveSummarizer {
-	
-	private static final Logger logger = LoggerFactory.getLogger(TFIDFVector.class);
-	
+
+	private static final Logger logger = LoggerFactory.getLogger(TFIDFVectorWiki.class);
+
 	// *******************************
 	// LexRank parameters:
 	// > linkThrashold_LR: The LexRank paper suggests a value of 0.1
@@ -42,38 +45,48 @@ public class LexRankSummarizer implements ExtractiveSummarizer {
 	// scores are used. The paper authors note that non-continuous LexRank seems to perform better.
 	private boolean isContinuous_LR = false; 
 	// *******************************
-	
+
 	private LangENUM lang;
-	
-	private TFIDFVector TFIDFcomput;
+
+	private TFIDFVectorWiki TFIDFcomput;
 	
 	
 	public LexRankSummarizer(LangENUM langIN, SentenceSimilarityENUM simMethod, boolean isContinuous, double thrashold) throws TextDigesterException {
 		if(langIN == null) {
 			throw new TextDigesterException("Specify a language to load a tfidf word list and stopword list.");
 		}
-		
+
 		lang = langIN;
-		
-		TFIDFcomput = new TFIDFVector(lang);
-		
+
 		if(simMethod != null) {
 			sentSimilarity = simMethod;
 		}
-		
+		else {
+			sentSimilarity = SentenceSimilarityENUM.cosineTFIDF;
+		}
+
+		switch(sentSimilarity) {
+		case cosineTFIDF:
+			TFIDFcomput = new TFIDFVectorWiki(lang);
+			break;
+		case cosineEMBED:
+			
+			break;
+		}
+
 		isContinuous_LR = isContinuous;
 		linkThrashold_LR = thrashold;
 	}
-	
+
 
 	@Override
 	public Map<Annotation, Double> sortSentences(TDDocument doc) {
-		
+
 		GtUtils.initGate();
 
 		// Read the document to summarize
 		Document gateDoc = doc.getGATEdoc();
-		
+
 		Map<Annotation, Double> retMap = new HashMap<Annotation, Double>();
 
 		// STEP 1: If we consider that the document to summarize contains N sentence annotations, we have to generate a map
@@ -96,7 +109,7 @@ public class LexRankSummarizer implements ExtractiveSummarizer {
 				sentenceIndexToAnnotationMap.put(sentenceIndex++, sentenceAnnotation);
 			}
 		}
-		
+
 		logger.info("*** Start Ranking " + sentenceIndexToAnnotationMap.size() + " sentences...");
 
 		// STEP 2: Lex rank needs a sentence similarity matrix - square symmetric matrix, N * N, where N is the size of the sentenceIndexToAnnotationMap
@@ -127,7 +140,7 @@ public class LexRankSummarizer implements ExtractiveSummarizer {
 
 					// Store the similarity value in the matrix
 					similarityMatrix[y_val][x_val] = similarityMatrix[x_val][y_val] = similarityValue;
-					
+
 					computedSimilarityCounter++;
 					if(computedSimilarityCounter % 100 == 0) {
 						logger.info(" ...computed similarity of " + computedSimilarityCounter + " sentence pairs over " + ( (int) (Math.pow( (double) sentenceIndexToAnnotationMap.size(), 2d) / 2d ) ));
@@ -151,7 +164,7 @@ public class LexRankSummarizer implements ExtractiveSummarizer {
 		}
 
 		logger.info("*** Populated similarity matrix of size " + sentenceIndexToAnnotationMap.size());
-		
+
 		// Printing similarity matrix - UNCOMMENT IF NEEDED
 		/*
 		for(int i = 0; i < sentenceIndexToAnnotationMap.size(); i++) {
@@ -160,8 +173,8 @@ public class LexRankSummarizer implements ExtractiveSummarizer {
 			}
 			System.out.print("\n");
 		}
-		*/
-		
+		 */
+
 		// STEP 4: LexRank computation
 		System.out.println("*** Starting LexRank computations...");
 		List<DummyItem> items = new ArrayList<DummyItem>();
@@ -190,11 +203,11 @@ public class LexRankSummarizer implements ExtractiveSummarizer {
 			try {
 				// Get sentence Annotation object
 				Annotation sentenceAnnotation = sentenceIndexToAnnotationMap.get(sortedRrankedSentenceMapEntry.getKey());
-				
+
 				retMap.put(sentenceAnnotation, sortedRrankedSentenceMapEntry.getValue());
-				
+
 				String sentenceText = gateDoc.getContent().getContent(sentenceAnnotation.getStartNode().getOffset(), sentenceAnnotation.getEndNode().getOffset()).toString();
-				
+
 				System.out.println(rankingPosition++ + " > LexRank value: " + sortedRrankedSentenceMapEntry.getValue() + " :"
 						+ "\n >>> TEXT: " + sentenceText);
 			}
@@ -202,7 +215,7 @@ public class LexRankSummarizer implements ExtractiveSummarizer {
 				e.printStackTrace();
 			}
 		}
-		
+
 		return MapUtil.sortByValue(retMap);
 	}
 
@@ -217,17 +230,16 @@ public class LexRankSummarizer implements ExtractiveSummarizer {
 	 * @return
 	 */
 	private double computeSentenceSimilarity(TDDocument doc, Annotation sentence1, Annotation sentence2) {
-		
+
 		switch(sentSimilarity) {
 		case cosineTFIDF:
 			return TFIDFcomput.cosSimTFIDF(sentence1, doc, sentence2, doc);
 		case cosineEMBED:
-			logger.error("STILL TO IMPLEMENT");
-			break;
+			return EmbeddingVectorWiki.cosSimEMBED(sentence1, doc, sentence2, doc, lang);
 		}
-		
+
 		return 0d;
 	}
-	
-	
+
+
 }

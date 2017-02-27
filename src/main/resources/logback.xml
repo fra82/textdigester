@@ -11,7 +11,7 @@
 		</encoder>
 	</appender>
 
-	<logger name="edu.upf.taln.textdigester" level="DEBUG" additivity="false">
+	<logger name="edu.upf.taln.textdigester" level="INFO" additivity="false">
 		<appender-ref ref="STDOUT" />
 	</logger>
 

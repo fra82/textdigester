@@ -8,7 +8,6 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
-import java.util.Random;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -54,70 +53,58 @@ public class FlProcessor {
 
 	private static final Logger logger = LoggerFactory.getLogger(FlProcessor.class);
 
-	private static Random rnd = new Random();
+	private static Map<LangENUM, Object> singletonLangSyncObjectMap = new HashMap<LangENUM, Object>();
 
 	// Check the following paths
 	private static final String FREELINGDIR = "/usr/local";
 	private static final String DATA = FREELINGDIR + "/share/freeling/";
-
-	private String LANG = "en";
-
+	
 	private static LangIdent lgid;
 
 	// Define analyzers:
-	private Tokenizer tk;
-	private Splitter sp;
-	private Maco mf;
-	private HmmTagger tg;
-	private ChartParser parser;
-	private DepTxala dep; // Not used
-	private Nec neclass; // Not used
-	private Senses sen; // Not used
-	private Ukb dis; // Not used
+	private static Map<LangENUM, Tokenizer> singletonLangTKMap = new HashMap<LangENUM, Tokenizer>();
+	private static Map<LangENUM, Splitter> singletonLangSpMap = new HashMap<LangENUM, Splitter>();
+	private static Map<LangENUM, Maco> singletonLangMfMap = new HashMap<LangENUM, Maco>();
+	private static Map<LangENUM, HmmTagger> singletonLangTgMap = new HashMap<LangENUM, HmmTagger>();
+	private static Map<LangENUM, ChartParser> singletonLangParserMap = new HashMap<LangENUM, ChartParser>();
+	private static Map<LangENUM, DepTxala> singletonLangDepMap = new HashMap<LangENUM, DepTxala>(); // Not used
+	private static Map<LangENUM, Nec> singletonLangNeClassMap = new HashMap<LangENUM, Nec>(); // Not used
+	private static Map<LangENUM, Senses> singletonLangSenMap = new HashMap<LangENUM, Senses>(); // Not used
+	private static Map<LangENUM, Ukb> singletonLangDisMap = new HashMap<LangENUM, Ukb>(); // Not used
 
 	protected static CorpusController corpusController_preprocess_ssplit = null;
 	private static final Object LOCK_corpusController_preprocess_ssplit = new Object();
-
-	/**
-	 * Instantiate a processor by specifying the language to use
-	 * 
-	 * @param flang
-	 * @throws Exception
-	 */
-	public FlProcessor(LangENUM flang) throws Exception {
-		if(flang == null) {
-			throw new Exception("Freeling language not specified!");
-		}
-
-		// Set language
-		switch(flang) {
-		case English:
-			LANG = "en";
-			break;
-		case Spanish:
-			LANG = "es";
-			break;
-		case Catalan:
-			LANG = "ca";
-			break;
-		default:
-			LANG = "en";
-		}
-
-		this.initiFreeling();
-	}
-
+	
 	/**
 	 * Initialize Freeling and load resources
 	 * 
 	 * @throws Exception
 	 */
-	private void initiFreeling() throws Exception {
+	private static void initiFreeling(LangENUM lang) throws Exception {
 
 		// Instantiate Freeling resources if not already done
-		if(tk == null) {
+		if(!singletonLangTKMap.containsKey(lang) || singletonLangTKMap.get(lang) == null) {
+			
+			// Set language
+			String LANG = "en";
+			switch(lang) {
+			case English:
+				LANG = "en";
+				break;
+			case Spanish:
+				LANG = "es";
+				break;
+			case Catalan:
+				LANG = "ca";
+				break;
+			default:
+				LANG = "en";
+			}
+			
 			logger.info("Initializing Freeling (language " + LANG + ")...");
-
+			
+			singletonLangSyncObjectMap.put(lang, new Object());
+			
 			System.loadLibrary("freeling_javaAPI");
 
 			Util.initLocale("default");
@@ -138,28 +125,33 @@ public class FlProcessor {
 
 			// Create analyzers.
 
-			tk = new Tokenizer( DATA + LANG + "/tokenizer.dat" );
-			sp = new Splitter( DATA + LANG + "/splitter.dat" );
-			SWIGTYPE_p_splitter_status sid = sp.openSession();
+			singletonLangTKMap.put(lang, new Tokenizer( DATA + LANG + "/tokenizer.dat" ));
 
-			mf = new Maco( op );
+			singletonLangSpMap.put(lang, new Splitter( DATA + LANG + "/splitter.dat" ));
+
+			Maco mf = new Maco( op );
 			mf.setActiveOptions(false, true, true, true,  // select which among created 
 					true, true, false, true,  // submodules are to be used. 
 					true, true, true, true);  // default: all created submodules 
 			// are used
+			singletonLangMfMap.put(lang, mf);
 
-			tg = new HmmTagger( DATA + LANG + "/tagger.dat", true, 2 );
-			parser = new ChartParser( DATA + LANG + "/chunker/grammar-chunk.dat" );
-			dep = new DepTxala( DATA + LANG + "/dep_txala/dependences.dat",
-					parser.getStartSymbol() );
-			neclass = new Nec( DATA + LANG + "/nerc/nec/nec-ab-poor1.dat" );
+			singletonLangTgMap.put(lang, new HmmTagger( DATA + LANG + "/tagger.dat", true, 2 ));			
 
-			sen = new Senses( DATA + LANG + "/senses.dat" ); // sense dictionary
-			dis = new Ukb( DATA + LANG + "/ukb.dat" ); // sense disambiguator
+			singletonLangParserMap.put(lang, new ChartParser( DATA + LANG + "/chunker/grammar-chunk.dat" ));
 
-			logger.info("Freeling initialized (language " + LANG + ").");
+			singletonLangDepMap.put(lang, new DepTxala( DATA + LANG + "/dep_txala/dependences.dat", singletonLangParserMap.get(lang).getStartSymbol() ));
+
+			singletonLangNeClassMap.put(lang, new Nec( DATA + LANG + "/nerc/nec/nec-ab-poor1.dat" ));
+
+			singletonLangSenMap.put(lang, new Senses( DATA + LANG + "/senses.dat" )); // sense dictionary
+
+			singletonLangDisMap.put(lang, new Ukb( DATA + LANG + "/ukb.dat" )); // sense disambiguator
+
+			logger.info("Freeling initialized (language " + lang + ").");
 
 			// Init GATE ssplit
+			GtUtils.initGate();
 			String resourcePath = PropertyManager.getProperty("textdigester.resource");
 			resourcePath = (resourcePath.endsWith(File.separator)) ? resourcePath : resourcePath + File.separator;
 
@@ -209,32 +201,43 @@ public class FlProcessor {
 		}
 	}
 
-	private Sentence analyzeSentenceText(String sentenceText) {
-		// Extract the tokens from the line of text
-		ListWord l = tk.tokenize(sentenceText);
+	private static Sentence analyzeSentenceText(String sentenceText, LangENUM lang) {
 
-		Sentence sent = new Sentence(l);
+		if(lang == null) {
+			return null;
+		}
 
-		// Perform morphological analysis
-		mf.analyze(sent);
+		synchronized(singletonLangSyncObjectMap.get(lang)) {
+			SWIGTYPE_p_splitter_status sid = singletonLangSpMap.get(lang).openSession();
 
-		// Perform part-of-speech tagging.
-		tg.analyze(sent);
+			// Extract the tokens from the line of text
+			ListWord l = singletonLangTKMap.get(lang).tokenize(sentenceText);
 
-		// Perform named entity (NE) classification
-		// neclass.analyze(sent); - DISABLED
+			Sentence sent = new Sentence(l);
 
-		// sen.analyze(sent); - DISABLED
+			// Perform morphological analysis
+			singletonLangMfMap.get(lang).analyze(sent);
 
-		// dis.analyze(sent); - DISABLED
+			// Perform part-of-speech tagging.
+			singletonLangTgMap.get(lang).analyze(sent);
 
-		// Chunk parser
-		//parser.analyze(sent); - DISABLED
+			// Perform named entity (NE) classification
+			// singletonLangNeMap.get(lang).analyze(sent); - DISABLED
 
-		// Dependency parser
-		// dep.analyze(sent); - DISABLED
+			// singletonLangSenMap.get(lang).analyze(sent); - DISABLED
 
-		return sent;
+			// singletonLangDisMap.get(lang).analyze(sent); - DISABLED
+
+			// Chunk parser
+			// singletonLangParserMap.get(lang).analyze(sent); - DISABLED
+
+			// Dependency parser
+			// singletonLangDepMap.get(lang).analyze(sent); - DISABLED
+
+			singletonLangSpMap.get(lang).closeSession(sid);
+
+			return sent;
+		}
 	}
 
 
@@ -244,35 +247,43 @@ public class FlProcessor {
 	 * @param text
 	 * @return
 	 */
-	private ListSentence analyzeText(String text) {
+	private static ListSentence analyzeText(String text, LangENUM lang) {
 
-		// Extract the tokens from the line of text
-		ListWord l = tk.tokenize(text);
+		if(lang == null) {
+			return null;
+		}
 
-		SWIGTYPE_p_splitter_status sid = sp.openSession();
+		synchronized(singletonLangSyncObjectMap.get(lang)) {
+			SWIGTYPE_p_splitter_status sid = singletonLangSpMap.get(lang).openSession();
 
-		ListSentence ls = sp.split(sid, l, false); // Original: true
+			// Extract the tokens from the line of text
+			ListWord l = singletonLangTKMap.get(lang).tokenize(text);
 
-		// Perform morphological analysis
-		mf.analyze(ls);
+			ListSentence ls = singletonLangSpMap.get(lang).split(sid, l, false); // Original: true
 
-		// Perform part-of-speech tagging.
-		tg.analyze(ls);
+			// Perform morphological analysis
+			singletonLangMfMap.get(lang).analyze(ls);
 
-		// Perform named entity (NE) classification
-		// neclass.analyze(ls); - DISABLED
+			// Perform part-of-speech tagging.
+			singletonLangTgMap.get(lang).analyze(ls);
 
-		// sen.analyze(ls); - DISABLED
+			// Perform named entity (NE) classification
+			// singletonLangNeMap.get(lang).analyze(ls); - DISABLED
 
-		// dis.analyze(ls); - DISABLED
+			// singletonLangSenMap.get(lang).analyze(ls); - DISABLED
 
-		// Chunk parser
-		//parser.analyze(ls); - DISABLED
+			// singletonLangDisMap.get(lang).analyze(ls); - DISABLED
 
-		// Dependency parser
-		// dep.analyze(ls); - DISABLED
+			// Chunk parser
+			// singletonLangParserMap.get(lang).analyze(ls); - DISABLED
 
-		return ls;
+			// Dependency parser
+			// singletonLangDepMap.get(lang).analyze(ls); - DISABLED
+
+			singletonLangSpMap.get(lang).closeSession(sid);
+
+			return ls;
+		}
 	}
 
 	/**
@@ -281,10 +292,17 @@ public class FlProcessor {
 	 * @param inputText
 	 * @return
 	 */
-	public TDDocument generateDocumentFromFreeText(String inputText, String name) {
+	public static TDDocument generateDocumentFromFreeText(String inputText, String name, LangENUM lang) {
 
-		if(inputText != null) {
-			logger.info("Parsing plain text (language " + LANG + ", text length " + inputText.length() + " chars)...");
+		if(inputText != null && lang != null) {
+			
+			try {
+				initiFreeling(lang);
+			} catch (Exception e2) {
+				e2.printStackTrace();
+			}
+			
+			logger.info("Parsing plain text (language " + lang + ", text length " + inputText.length() + " chars)...");
 
 			// Maps to store the start offset, end offset, name and features of the annotations that will be added to the inputText in a GATE document
 			Map<Long, Long> GATEann_StartOffset = new HashMap<Long, Long>();
@@ -305,7 +323,7 @@ public class FlProcessor {
 			annNum++;
 
 			// Visiting all the sentences spotted inside the text of the tweet
-			ListSentenceIterator sIt = new ListSentenceIterator(analyzeText(inputText));
+			ListSentenceIterator sIt = new ListSentenceIterator(analyzeText(inputText, lang));
 
 			while (sIt.hasNext()) {
 
@@ -361,6 +379,14 @@ public class FlProcessor {
 					}
 				}
 
+				// Delete words
+				wIt = new ListWordIterator(s);
+				while (wIt.hasNext()) {
+					Word w = wIt.next();
+					w.delete();
+				}
+				wIt.delete();
+
 				// *** Add sentence annotation ***
 				GATEann_StartOffset.put(annNum, startDocumentOffset + stenStart);
 				GATEann_EndOffset.put(annNum, startDocumentOffset + stenFinish);
@@ -369,6 +395,13 @@ public class FlProcessor {
 				annNum++;
 
 			}
+
+			// Delete sentences
+			while (sIt.hasNext()) {
+				Sentence s = sIt.next();
+				s.delete();
+			}
+			sIt.delete();
 
 			GtUtils.initGate();
 
@@ -395,7 +428,7 @@ public class FlProcessor {
 				}
 
 
-				logger.info("Parsed plain text (language " + LANG + ", text length " + inputText.length() + " chars) - added " + GATEann_StartOffset.size() + " text annotations.");
+				logger.info("Parsed plain text (language " + lang + ", text length " + inputText.length() + " chars) - added " + GATEann_StartOffset.size() + " text annotations.");
 
 				return new TDDocument(inputText, gateDoc, name);
 			} catch (Exception e1) {
@@ -413,10 +446,17 @@ public class FlProcessor {
 	 * @param inputDoc
 	 * @return
 	 */
-	public TDDocument parseDocumentSentences(TDDocument inputDoc) {
+	@Deprecated
+	public static TDDocument parseDocumentSentences(TDDocument inputDoc, LangENUM lang) {
 
-		if(inputDoc == null) {
+		if(inputDoc == null || lang == null) {
 			return null;
+		}
+		
+		try {
+			initiFreeling(lang);
+		} catch (Exception e2) {
+			e2.printStackTrace();
 		}
 
 		// Remove sentences and tokens
@@ -431,7 +471,7 @@ public class FlProcessor {
 		}
 
 		if(inputText != null) {
-			logger.info("Parsing GATE document (language " + LANG + ", text length " + inputText.length() + " chars)...");
+			logger.info("Parsing GATE document (language " + lang + ", text length " + inputText.length() + " chars)...");
 
 			// Maps to store the start offset, end offset, name and features of the annotations that will be added to the inputText in a GATE document
 			Map<Long, Long> GATEann_StartOffset = new HashMap<Long, Long>();
@@ -452,7 +492,7 @@ public class FlProcessor {
 			annNum++;
 
 			// Visiting all the sentences spotted inside the text of the tweet
-			ListSentenceIterator sIt = new ListSentenceIterator(analyzeText(inputText));
+			ListSentenceIterator sIt = new ListSentenceIterator(analyzeText(inputText, lang));
 
 			while (sIt.hasNext()) {
 
@@ -541,7 +581,7 @@ public class FlProcessor {
 				}
 
 
-				logger.info("Parsed plain text (language " + LANG + ", text length " + inputText.length() + " chars) - added " + GATEann_StartOffset.size() + " text annotations.");
+				logger.info("Parsed plain text (language " + lang + ", text length " + inputText.length() + " chars) - added " + GATEann_StartOffset.size() + " text annotations.");
 
 				return inputDoc;
 			} catch (Exception e1) {
@@ -560,12 +600,18 @@ public class FlProcessor {
 	 * @param inputDoc
 	 * @return
 	 */
-	public TDDocument parseDocumentGTSentences(TDDocument inputDoc) {
+	public static TDDocument parseDocumentGTSentences(TDDocument inputDoc, LangENUM lang) {
 
-		if(inputDoc == null) {
+		if(inputDoc == null || lang == null) {
 			return null;
 		}
-
+		
+		try {
+			initiFreeling(lang);
+		} catch (Exception e2) {
+			e2.printStackTrace();
+		}
+		
 		// Remove sentences and tokens
 		GtUtils.removeAnnotationOfType(inputDoc.getGATEdoc(), TDDocument.mainAnnSet, TDDocument.sentenceAnnType);
 		GtUtils.removeAnnotationOfType(inputDoc.getGATEdoc(), TDDocument.mainAnnSet, TDDocument.tokenAnnType);
@@ -607,15 +653,15 @@ public class FlProcessor {
 		AnnotationSet sectHeaderAnnSet = inputDoc.getGATEdoc().getAnnotations(TDDocument.mainAnnSet).get(TDDocument.sectHeaderAnnType);
 		List<Annotation> listToDelOverlappingSent = gate.Utils.inDocumentOrder(titleAnnSet);
 		listToDelOverlappingSent.addAll(gate.Utils.inDocumentOrder(sectHeaderAnnSet));
-		
+
 		boolean changesDone = true;
-		
+
 		Annotation sentToDel = null;
-		
+
 		while(changesDone) {
 			changesDone = false;
 			sentToDel = null;
-			
+
 			if(listToDelOverlappingSent != null && listToDelOverlappingSent.size() > 0) {
 				AnnotationSet sentAnnSet = inputDoc.getGATEdoc().getAnnotations(TDDocument.mainAnnSet).get(TDDocument.sentenceAnnType);
 				Iterator<Annotation> sentAnnSetIter = sentAnnSet.iterator();
@@ -628,7 +674,6 @@ public class FlProcessor {
 						// Resize sentence annotation if this is the case
 						if(sentAnn.getEndNode().getOffset() <= overlapElem.getEndNode().getOffset() &&
 								sentAnn.getStartNode().getOffset() >= overlapElem.getStartNode().getOffset()) {
-							System.out.println("DELETE");
 							changesDone = true;
 							sentToDel = sentAnn;
 							break;
@@ -637,7 +682,6 @@ public class FlProcessor {
 								(sentAnn.getEndNode().getOffset() > overlapElem.getStartNode().getOffset() && sentAnn.getEndNode().getOffset() <= overlapElem.getEndNode().getOffset())) {
 							try {
 								inputDoc.getGATEdoc().getAnnotations(TDDocument.mainAnnSet).add(sentAnn.getStartNode().getOffset(), overlapElem.getStartNode().getOffset(), TDDocument.sentenceAnnType, sentAnn.getFeatures());
-								System.out.println("RESIZE BEFORE");
 								changesDone = true;
 								sentToDel = sentAnn;
 								break;
@@ -649,7 +693,6 @@ public class FlProcessor {
 								(sentAnn.getStartNode().getOffset() >= overlapElem.getStartNode().getOffset() && sentAnn.getStartNode().getOffset() < overlapElem.getEndNode().getOffset())) {
 							try {
 								inputDoc.getGATEdoc().getAnnotations(TDDocument.mainAnnSet).add(overlapElem.getEndNode().getOffset(), sentAnn.getEndNode().getOffset(), TDDocument.sentenceAnnType, sentAnn.getFeatures());
-								System.out.println("RESIZE AFTER");
 								changesDone = true;
 								sentToDel = sentAnn;
 								break;
@@ -663,12 +706,11 @@ public class FlProcessor {
 								if(sentAnn.getEndNode().getOffset() - overlapElem.getEndNode().getOffset() > 15l) {
 									inputDoc.getGATEdoc().getAnnotations(TDDocument.mainAnnSet).add(overlapElem.getEndNode().getOffset(), sentAnn.getEndNode().getOffset(), TDDocument.sentenceAnnType, sentAnn.getFeatures());
 								}
-								
+
 								if(overlapElem.getStartNode().getOffset() - sentAnn.getStartNode().getOffset() > 15l) {
 									inputDoc.getGATEdoc().getAnnotations(TDDocument.mainAnnSet).add(sentAnn.getStartNode().getOffset(), overlapElem.getStartNode().getOffset(), TDDocument.sentenceAnnType, sentAnn.getFeatures());
 								}
-								
-								System.out.println("RESIZE BOTH");
+
 								changesDone = true;
 								sentToDel = sentAnn;
 								break;
@@ -677,22 +719,19 @@ public class FlProcessor {
 							}
 						}
 					}
-					
+
 					if(changesDone) {
 						break;
 					}
 				}
 			}
-			
+
 			if(sentToDel != null) {
 				inputDoc.getGATEdoc().getAnnotations(TDDocument.mainAnnSet).remove(sentToDel);
 			}
 		}
-		
-		
-		
-		
-		
+
+
 		// Parsing all the annotations of the mainAnnSet as sentences
 		List<Annotation> annotationsToParse = gate.Utils.inDocumentOrder(inputDoc.getGATEdoc().getAnnotations(TDDocument.mainAnnSet));
 
@@ -702,7 +741,7 @@ public class FlProcessor {
 				String sentText = GtUtils.getTextOfAnnotation(toParseAnn, inputDoc.getGATEdoc());
 
 				if(!Strings.isNullOrEmpty(sentText) && sentText.trim().length() > 0) {
-					logger.info("Parsing sentence (language " + LANG + ", text length " + sentText.length() + " chars)...");
+					logger.info("Parsing sentence (language " + lang + ", text length " + sentText.length() + " chars)...");
 
 					// Maps to store the start offset, end offset, name and features of the annotations that will be added to the inputText in a GATE document
 					Map<Long, Long> GATEann_StartOffset = new HashMap<Long, Long>();
@@ -715,7 +754,7 @@ public class FlProcessor {
 					long startDocumentOffset = toParseAnn.getStartNode().getOffset();
 					long endDocumentOffset = toParseAnn.getEndNode().getOffset();
 
-					Sentence s = analyzeSentenceText(sentText);
+					Sentence s = analyzeSentenceText(sentText, lang);
 
 					// Iterating sentence words
 					ListWordIterator wIt = new ListWordIterator(s);
@@ -801,7 +840,7 @@ public class FlProcessor {
 						}
 
 
-						logger.info("Parsed sentence text (language " + LANG + ", text length " + sentText.length() + " chars) - added " + GATEann_StartOffset.size() + " text annotations.");
+						logger.info("Parsed sentence text (language " + lang + ", text length " + sentText.length() + " chars) - added " + GATEann_StartOffset.size() + " text annotations.");
 
 					} catch (Exception e1) {
 						e1.printStackTrace();

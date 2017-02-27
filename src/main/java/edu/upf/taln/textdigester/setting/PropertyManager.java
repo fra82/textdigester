@@ -22,6 +22,9 @@ public class PropertyManager {
 	private static String propertyPath;
 	private static Properties holder = null; 
 	
+	
+	public static String defaultPropertyFilePath = "/home/francesco/Desktop/NLP_HACHATHON_4YFN/TextDigesterConfig.properties";
+	
 	/**
 	 * Load the property file.
 	 * The path of the Text Digester property file is specified as a local absolute 

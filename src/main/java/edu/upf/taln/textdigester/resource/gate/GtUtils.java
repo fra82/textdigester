@@ -14,6 +14,7 @@ import java.util.TreeMap;
 import com.google.common.base.Strings;
 
 import edu.upf.taln.textdigester.model.TDDocument;
+import edu.upf.taln.textdigester.setting.MapUtil;
 import edu.upf.taln.textdigester.setting.PropertyManager;
 import gate.Annotation;
 import gate.AnnotationSet;
@@ -74,7 +75,7 @@ public class GtUtils {
 		return retText;
 	}
 
-	public static List<Annotation> orderAnnotations(List<Annotation> annList, Document doc, Integer numTokenLimit) {
+	public static List<Annotation> orderAnnotationList(List<Annotation> annList, Document doc, Integer numTokenLimit) {
 		List<Annotation> retAnnList = new ArrayList<Annotation>();
 
 		if(annList != null && annList.size() > 0 && doc != null) {
@@ -82,7 +83,7 @@ public class GtUtils {
 			Map<Long, Annotation> startOffserAnnMap = new HashMap<Long, Annotation>();
 			try {
 				Set<String> swAppo = new HashSet<String>();
-				
+
 				for(Annotation ann : annList) {
 					if(ann != null) {
 						List<String> annotation_terms = TDDocument.extractTokenList(ann, new TDDocument("", doc, null), null, true, true, true, false, false, swAppo);
@@ -90,13 +91,13 @@ public class GtUtils {
 						if(numTokenLimit != null && numTokenLimit > 0 && totalTokens >= numTokenLimit) {
 							break;
 						}
-						
+
 						startOffserAnnMap.put(ann.getStartNode().getOffset(), ann);
 					}
 				}
-				
+
 				Map<Long, Annotation> startOffserAnnMapOrdered = new TreeMap<Long, Annotation>(startOffserAnnMap);
-				
+
 				for(Entry<Long, Annotation> annOrderedEntry : startOffserAnnMapOrdered.entrySet()) {
 					retAnnList.add(annOrderedEntry.getValue());
 				}
@@ -109,15 +110,14 @@ public class GtUtils {
 		return retAnnList;
 	}
 	
-	
 	public static Document removeAnnotationOfType(Document doc, String annSet, String annType) {
 		if(doc != null && !Strings.isNullOrEmpty(annSet) && !Strings.isNullOrEmpty(annType)) {
 			List<Annotation> annToDelList = new ArrayList<Annotation>();
-			
+
 			AnnotationSet annSetToRefine = doc.getAnnotations(annSet);
 			if(annSetToRefine != null && annSetToRefine.size() > 0) {
 				Iterator<Annotation> annSetToRefineIter = annSetToRefine.iterator();
-				
+
 				while(annSetToRefineIter.hasNext()) {
 					Annotation annLocal = annSetToRefineIter.next();
 					if(annLocal != null && annLocal.getType().equals(annType)) {
@@ -125,14 +125,35 @@ public class GtUtils {
 					}
 				}
 			}
-			
+
 			for(Annotation annToDel : annToDelList) {
 				doc.getAnnotations(annSet).remove(annToDel);
 			}
 		}
-		
+
 		return doc;
 	}
+
+	public static Map<Annotation, Double> orderSentencesBySentFeatValue(Document doc, String featName) {
+		Map<Annotation, Double> retMap = new HashMap<Annotation, Double>();
+
+		List<Annotation> sentences = gate.Utils.inDocumentOrder(doc.getAnnotations(TDDocument.mainAnnSet).get(TDDocument.sentenceAnnType));
+		for(Annotation sent : sentences) {
+			try {
+				if(sent != null && sent.getFeatures() != null && sent.getFeatures().containsKey(featName) &&
+						sent.getFeatures().get(featName) != null && ((String) sent.getFeatures().get(featName)) != null) {
+					String featVal = (String) sent.getFeatures().get(featName);
+					Double featValNum = Double.valueOf(featVal.trim());
+					retMap.put(sent, featValNum);
+				}
+			} catch(Exception e) {
+
+			}
+		}
+
+		return MapUtil.sortByValue(retMap);
+	}
+
 
 
 }

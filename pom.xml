@@ -14,6 +14,7 @@
 		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
 		<slf4j.version>1.7.23</slf4j.version>
 		<logback.version>1.2.1</logback.version>
+		<jettyVersion>9.3.0.M1</jettyVersion>
 	</properties>
 
 	<repositories>
@@ -113,18 +114,32 @@
 			<version>0.7.2</version>
 		</dependency>
 
+		<dependency>
+			<groupId>org.nd4j</groupId>
+			<artifactId>nd4j-native-platform</artifactId>
+			<version>0.7.2</version>
+		</dependency>
+
+
 		<!-- GATE -->
 		<dependency>
 			<groupId>uk.ac.gate</groupId>
 			<artifactId>gate-core</artifactId>
 			<version>8.3</version>
 		</dependency>
-		
+
 		<!-- Freeling -->
 		<dependency>
 			<groupId>edu.upc</groupId>
 			<artifactId>freeling</artifactId>
 			<version>4.0</version>
+		</dependency>
+		
+		<!-- SUMMA -->
+		<dependency>
+			<groupId>edu.upf.taln.summa</groupId>
+			<artifactId>summaupf</artifactId>
+			<version>0.0.2</version>
 		</dependency>
 		
 		<!-- Boilerpipe HTML -->
@@ -151,6 +166,20 @@
 			<groupId>ch.qos.logback</groupId>
 			<artifactId>logback-core</artifactId>
 			<version>${logback.version}</version>
+		</dependency>
+
+		<!-- Jetty webapp -->
+		<dependency>
+			<groupId>org.eclipse.jetty</groupId>
+			<artifactId>jetty-webapp</artifactId>
+			<version>${jettyVersion}</version>
+		</dependency>
+
+		<!-- With JSP support -->
+		<dependency>
+			<groupId>org.eclipse.jetty</groupId>
+			<artifactId>jetty-jsp</artifactId>
+			<version>${jettyVersion}</version>
 		</dependency>
 	</dependencies>
 </project>

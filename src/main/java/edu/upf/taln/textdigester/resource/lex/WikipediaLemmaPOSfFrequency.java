@@ -34,7 +34,7 @@ public class WikipediaLemmaPOSfFrequency {
 		
 		if(lang != null) {
 			
-			if(wordFrequency.containsKey(lang)) {
+			if(wordFrequency.containsKey(lang) && wordFrequency.get(lang) != null) {
 				return;
 			}
 			
@@ -97,7 +97,7 @@ public class WikipediaLemmaPOSfFrequency {
 
 			}
 			else {
-				throw new TextDigesterException("Impossible to read stopword list for " + lang + " from file: '" +
+				throw new TextDigesterException("Impossible to read TFIDF for " + lang + " from file: '" +
 						((tfidfFileName != null) ? tfidfFileName : "NULL")+ "'");
 			}
 		}

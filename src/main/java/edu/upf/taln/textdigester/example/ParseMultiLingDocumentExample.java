@@ -1,4 +1,4 @@
-package edu.upf.taln.textdigester;
+package edu.upf.taln.textdigester.example;
 
 import java.io.BufferedWriter;
 import java.io.FileNotFoundException;
@@ -41,19 +41,10 @@ public class ParseMultiLingDocumentExample {
 
 		/* Process text document */
 		LangENUM languageOfHTMLdoc = FlProcessor.getLanguage(text);
-		FlProcessor flProc = null;
-		try {
-			flProc = new FlProcessor(languageOfHTMLdoc);
-		}
-		catch(Exception e) {
-			e.printStackTrace();
-			return;
-		}
-
-		TDDocument TDdoc = flProc.generateDocumentFromFreeText(text, null);
+		
+		TDDocument TDdoc = FlProcessor.generateDocumentFromFreeText(text, null, languageOfHTMLdoc);
 
 		// Store GATE document
-		/*
 		Writer out = null;
 		try {
 			out = new BufferedWriter(new OutputStreamWriter(new FileOutputStream("/home/francesco/Desktop/NLP_HACHATHON_4YFN/EXAMPLE_TEXTS/" + lang + "_" + docName.replace(".txt", "_GATE.xml")), "UTF-8"));
@@ -74,8 +65,8 @@ public class ParseMultiLingDocumentExample {
 				e.printStackTrace();
 			}
 		}
-		*/
 		
+		/*
 		try {
 			LexRankSummarizer lexRank = new LexRankSummarizer(languageOfHTMLdoc, SentenceSimilarityENUM.cosineTFIDF, false, 0.01);
 			Map<Annotation, Double> sortedSentences = lexRank.sortSentences(TDdoc);
@@ -94,6 +85,7 @@ public class ParseMultiLingDocumentExample {
 		} catch (TextDigesterException e) {
 			e.printStackTrace();
 		}
+		*/
 	}
 
 }

@@ -1,4 +1,4 @@
-package edu.upf.taln.textdigester;
+package edu.upf.taln.textdigester.example;
 
 import java.io.BufferedWriter;
 import java.io.FileNotFoundException;
@@ -55,22 +55,14 @@ public class ParseDocumentExample {
 
 		/* Process text document */
 		LangENUM languageOfHTMLdoc = FlProcessor.getLanguage(docList.get(0).getOriginalText());
-		FlProcessor flProc = null;
-		try {
-			flProc = new FlProcessor(languageOfHTMLdoc);
-		}
-		catch(Exception e) {
-			e.printStackTrace();
-			return;
-		}
-
+		
 		AnnotationSet sentenceAnnotationsBefore = docList.get(0).getGATEdoc().getAnnotations(TDDocument.mainAnnSet).get(TDDocument.sentenceAnnType);
 		AnnotationSet tokenAnnotationsBefore = docList.get(0).getGATEdoc().getAnnotations(TDDocument.mainAnnSet).get(TDDocument.tokenAnnType);
 
 		logger.info("Number of sentences identified BEFORE Freeling processing: " + sentenceAnnotationsBefore.size());
 		logger.info("Number of tokens identified BEFORE Freeling processing: " + tokenAnnotationsBefore.size());
 
-		flProc.parseDocumentGTSentences(docList.get(0));
+		FlProcessor.parseDocumentGTSentences(docList.get(0), languageOfHTMLdoc);
 
 		AnnotationSet sentenceAnnotations = docList.get(0).getGATEdoc().getAnnotations(TDDocument.mainAnnSet).get(TDDocument.sentenceAnnType);
 		AnnotationSet tokenAnnotations = docList.get(0).getGATEdoc().getAnnotations(TDDocument.mainAnnSet).get(TDDocument.tokenAnnType);

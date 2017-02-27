@@ -1,4 +1,4 @@
-package edu.upf.taln.textdigester;
+package edu.upf.taln.textdigester.example;
 
 import java.net.URL;
 import java.util.List;

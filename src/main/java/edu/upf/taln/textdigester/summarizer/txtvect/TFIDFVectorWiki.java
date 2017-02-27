@@ -19,9 +19,9 @@ import edu.upf.taln.textdigester.setting.LangENUM;
 import edu.upf.taln.textdigester.setting.exception.TextDigesterException;
 import gate.Annotation;
 
-public class TFIDFVector {
+public class TFIDFVectorWiki {
 
-	private static final Logger logger = LoggerFactory.getLogger(TFIDFVector.class);
+	private static final Logger logger = LoggerFactory.getLogger(TFIDFVectorWiki.class);
 
 	private LangENUM lang;
 
@@ -33,8 +33,8 @@ public class TFIDFVector {
 	public boolean appendPOS = true;
 	public Set<String> stopWordsList = new HashSet<String>();
 	
-	// COnstructor
-	public TFIDFVector(LangENUM langIN) throws TextDigesterException {
+	// Constructor
+	public TFIDFVectorWiki(LangENUM langIN) throws TextDigesterException {
 		if(langIN == null) {
 			throw new TextDigesterException("Specify a language to load a tfidf word list and stopword list.");
 		}
