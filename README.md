@@ -156,7 +156,7 @@ public class CoreExample {
 		
 		
 		/* Load property file */
-		PropertyManager.setPropertyFilePath("/home/francesco/Desktop/NLP_HACHATHON_4YFN/TextDigesterConfig.properties");
+		PropertyManager.setPropertyFilePath("/local/path/to/TextDigesterConfig.properties");
 
 		/* Extract main-text from HTML page and parse it */
 		TDDocument HTMLdoc_1 = null;

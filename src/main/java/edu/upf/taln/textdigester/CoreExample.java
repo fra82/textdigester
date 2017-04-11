@@ -110,9 +110,9 @@ public class CoreExample {
 		
 		
 		/* Load property file */
-		PropertyManager.setPropertyFilePath("/home/francesco/Desktop/NLP_HACHATHON_4YFN/TextDigesterConfig.properties");
+		PropertyManager.setPropertyFilePath("/local/path/to/TextDigesterConfig.properties");
 
-		/* Extract main-text from HTML page and parse it */
+		/* Extract main-text from HTML pages and parse it */
 		TDDocument HTMLdoc_1 = null;
 		try {
 			HTMLdoc_1 = HTMLimporter.extractText(new URL("http://www.ara.cat/cultura/llista-tots-nominats-als-Oscars_0_1750025056.html"));
