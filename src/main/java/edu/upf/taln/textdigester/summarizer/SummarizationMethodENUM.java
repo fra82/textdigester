@@ -4,6 +4,7 @@
 package edu.upf.taln.textdigester.summarizer;
 
 /**
+ * Available extractive summarization methods
  * 
  * @author Francesco Ronzano
  *

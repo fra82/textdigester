@@ -1,3 +1,6 @@
+/**
+ * TextDigester: Document Summarization Framework
+ */
 package edu.upf.taln.textdigester.summarizer.method.multi.centroid;
 
 import java.util.Map;

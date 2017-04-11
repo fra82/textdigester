@@ -1,8 +1,3 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
 package edu.upf.taln.textdigester.summarizer.summa;
 
 
@@ -33,7 +28,8 @@ import gate.Gate;
 import gate.util.GateException;
 
 /**
- *
+ * Class the invoke the summarization methods implemented by means do the SUMMA library http://www.taln.upf.edu/pages/summa.upf/.
+ * 
  * @author Horacio Saggion
  */
 public class CallSUMMA {

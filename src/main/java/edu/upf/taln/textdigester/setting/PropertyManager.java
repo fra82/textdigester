@@ -16,6 +16,7 @@ import org.slf4j.LoggerFactory;
 import edu.upf.taln.textdigester.setting.exception.TextDigesterException;
 
 /**
+ * Property manager
  * 
  * @author Francesco Ronzano
  *
@@ -30,7 +31,7 @@ public class PropertyManager {
 	private static Properties holder = null; 
 	
 	
-	public static String defaultPropertyFilePath = "/home/francesco/Desktop/NLP_HACHATHON_4YFN/TextDigesterConfig.properties";
+	public static String defaultPropertyFilePath = "/local/path/to/TextDigesterConfig.properties";
 	
 	/**
 	 * Load the property file.

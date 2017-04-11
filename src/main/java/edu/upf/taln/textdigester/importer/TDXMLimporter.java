@@ -35,6 +35,9 @@ import edu.upf.taln.textdigester.resource.gate.GtUtils;
 import gate.Factory;
 
 /**
+ * Importing documents in TDXML format.<br/>
+ * Example of XML document in TDXML: http://backingdata.org/textdigester/documetTEXTDIGESTER.xml
+ * 
  * 
  * @author Francesco Ronzano
  *

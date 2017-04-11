@@ -19,6 +19,7 @@ import gate.Factory;
 import gate.creole.ResourceInstantiationException;
 
 /**
+ * Class modeling a document to summarize
  * 
  * @author Francesco Ronzano
  *

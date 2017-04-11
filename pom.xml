@@ -182,8 +182,7 @@
 			<version>${jettyVersion}</version>
 		</dependency>
 		
-		<!-- Velocity to generated template-based output <dependency> <groupId>org.apache.velocity</groupId> 
-			<artifactId>velocity</artifactId> <version>1.7</version> </dependency> -->
+		<!-- Velocity to generated template-based output -->
 		<dependency>
 			<groupId>org.apache.velocity</groupId>
 			<artifactId>velocity-tools</artifactId>

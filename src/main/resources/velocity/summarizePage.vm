@@ -25,15 +25,15 @@
   		Insert here the text to summarize:<br/>
   		<textarea name="docText" rows="10" cols="90">Write your text here...</textarea><br/><br/>
   		Select the summarization approach:<br/>
-  		<input type="radio" name="methodS" value="LexRank_TFIDF" checked />TextRank_TFIDF 1<br/>
-		<input type="radio" name="methodS" value="TextRank_EMBED" />TextRank_EMBED 2<br/>
-		<input type="radio" name="methodS" value="Centroid_TFIDF" />Centroid_TFIDF 3<br/>
-		<input type="radio" name="methodS" value="Centroid_EMBED" />Centroid_EMBED 3<br/>
-		<input type="radio" name="methodS" value="FirstSim" />FirstSim<br/>
-		<input type="radio" name="methodS" value="SemScore" />SemScore<br/>
-		<input type="radio" name="methodS" value="TFscore" />TFscore<br/>
-		<input type="radio" name="methodS" value="Position" />Position<br/>
-		<input type="radio" name="methodS" value="Centroid_TFIDF_SUMMA" />Centroid_TFIDF_SUMMA<br/><br/>
+  		<input type="radio" name="methodS" value="LexRank_TFIDF" checked />TextRank with TFIDF<br/>
+		<input type="radio" name="methodS" value="TextRank_EMBED" />TextRank with EMBEDDING<br/>
+		<input type="radio" name="methodS" value="Centroid_TFIDF" />Centroid with TFIDF<br/>
+		<input type="radio" name="methodS" value="Centroid_EMBED" />Centroid with EMBEDDINGS<br/>
+		<input type="radio" name="methodS" value="FirstSim" />First Sentence Similarity<br/>
+		<input type="radio" name="methodS" value="SemScore" />Semantic Score<br/>
+		<input type="radio" name="methodS" value="TFscore" />Term Frequency score<br/>
+		<input type="radio" name="methodS" value="Position" />Position score<br/>
+		<input type="radio" name="methodS" value="Centroid_TFIDF_SUMMA" />Document Centroid SUMMA<br/><br/>
 		
 		Select the language:<br/>
   		<input type="radio" name="langS" value="Spanish" checked />Spanish<br/>
@@ -61,15 +61,17 @@
 	
 	
 	#if ($summaryGenerated)
-			<br/><br/>
+			<h2>Original text</h2>
+			$docText
+			<!-- <br/><br/>
 			<h2>Sentence ranking:</h2>
-			<ol>
+			<ol> -->
 			#foreach( $orderedSentencesStringElem in $orderedSentencesString)
 				#if ($orderedSentencesStringElem && $orderedSentencesStringElem.key && $orderedSentencesStringElem.value)
 					<li><b>SCORE</b>:&nbsp $orderedSentencesStringElem.value &nbsp - Sentence <span style="color: green;">$orderedSentencesStringElem.key</span></li>
 				#end
 			#end
-			</ol>
+			<!-- </ol> -->
 	#end
 	
 	</div>

@@ -18,6 +18,7 @@ import edu.upf.taln.textdigester.resource.gate.GtUtils;
 import gate.Annotation;
 
 /**
+ * Utility methods to generate extractive summaries
  * 
  * @author Francesco Ronzano
  *
@@ -25,7 +26,17 @@ import gate.Annotation;
 public class SummaryUtil {
 
 	private static final Logger logger = LoggerFactory.getLogger(SummaryUtil.class);
-
+	
+	/**
+	 * Given a map of ranked document sentences, select the top %.<br/>
+	 * See the class {@link edu.upf.taln.textdigester.summarizer.ConfigurableSummarizer ConfigurableSummarizer} to know how to generate
+	 * the map of ranked document sentences.
+	 * 
+	 * @param orderedSentences_SemScore map of ranked document sentences
+	 * @param doc document to summarize
+	 * @param percentageOfOriginalDocument top %
+	 * @return
+	 */
 	public static Map<Annotation, Double> getSummary(Map<Annotation, Double> orderedSentences_SemScore, TDDocument doc, double percentageOfOriginalDocument) {
 		Map<Annotation, Double> retMap = new HashMap<Annotation, Double>();
 
@@ -95,7 +106,17 @@ public class SummaryUtil {
 
 		return retMap;
 	}
-
+	
+	/**
+	 * Given a map of ranked document sentences, select the top sentences.<br/>
+	 * See the class {@link edu.upf.taln.textdigester.summarizer.ConfigurableSummarizer ConfigurableSummarizer} to know how to generate
+	 * the map of ranked document sentences.
+	 * 
+	 * @param orderedSentences_SemScore map of ranked document sentences
+	 * @param doc document to summarize
+	 * @param numSentence top sentences
+	 * @return
+	 */
 	public static Map<Annotation, Double> getSummary(Map<Annotation, Double> orderedSentences_SemScore, TDDocument doc, int numSentence) {
 		Map<Annotation, Double> retMap = new HashMap<Annotation, Double>();
 
@@ -160,6 +181,13 @@ public class SummaryUtil {
 	}
 
 
+	/**
+	 * Get the text of the summary sentences in orderedSentences_SemScore
+	 * 
+	 * @param orderedSentences_SemScore
+	 * @param doc
+	 * @return
+	 */
 	public static String getStringSummaryText(Map<Annotation, Double> orderedSentences_SemScore, TDDocument doc) {
 
 		if(orderedSentences_SemScore == null || orderedSentences_SemScore.size() == 0 || doc == null) {

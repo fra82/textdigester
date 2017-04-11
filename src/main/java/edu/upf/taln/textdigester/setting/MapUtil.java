@@ -6,6 +6,7 @@ package edu.upf.taln.textdigester.setting;
 import java.util.*;
 
 /**
+ * Utility class
  * 
  * @author Francesco Ronzano
  *

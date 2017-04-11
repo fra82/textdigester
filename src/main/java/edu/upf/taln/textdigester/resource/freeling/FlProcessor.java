@@ -53,6 +53,7 @@ import gate.creole.ExecutionException;
 import gate.util.InvalidOffsetException;
 
 /**
+ * Freeling Utility Class
  * 
  * @author Francesco Ronzano
  *

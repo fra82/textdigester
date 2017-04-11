@@ -23,6 +23,7 @@ import edu.upf.taln.textdigester.setting.exception.TextDigesterException;
 import gate.Annotation;
 
 /**
+ * Utility methods to compute TF-IDF sentence vectors
  * 
  * @author Francesco Ronzano
  *
@@ -50,7 +51,14 @@ public class TFIDFVectorWiki {
 		stopWordsList = StopWordList.getStopwordList(langIN);
 		lang = langIN;
 	}
-
+	
+	/**
+	 * Compute the TF-IDF vector of the sentence
+	 * 
+	 * @param ann sentence annotation
+	 * @param doc document including the sentence
+	 * @return
+	 */
 	public Map<String, Double> computeTFIDFvect(Annotation ann, TDDocument doc) {
 		Map<String, Double> retMap = new HashMap<String, Double>();
 

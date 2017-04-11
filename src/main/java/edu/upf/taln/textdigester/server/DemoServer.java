@@ -15,6 +15,8 @@ import org.eclipse.jetty.servlet.ServletContextHandler;
 import edu.upf.taln.textdigester.server.servlet.SummarizePage;
 
 /**
+ * Class to start a server running a demo of TextDigester and accessible ad http://localhost:8181/textdigester.<br/>
+ * The demo is implemented by the servlet {@link edu.upf.taln.textdigester.server.servlet.SummarizePage SummarizePage}.
  * 
  * @author Francesco Ronzano
  *

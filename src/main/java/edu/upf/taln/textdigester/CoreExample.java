@@ -24,6 +24,7 @@ import edu.upf.taln.textdigester.summarizer.util.SummaryUtil;
 import gate.Annotation;
 
 /**
+ * This class shows a typical usage pattern of TextDigester
  * 
  * @author Francesco Ronzano
  *
@@ -33,8 +34,9 @@ public class CoreExample {
 	private static final Logger logger = LoggerFactory.getLogger(CoreExample.class);
 
 	public static void main(String[] args) {
+		
 		/* Load property file */
-		PropertyManager.setPropertyFilePath("/home/francesco/Desktop/NLP_HACHATHON_4YFN/TextDigesterConfig.properties");
+		PropertyManager.setPropertyFilePath("/local/path/to/TextDigesterConfig.properties");
 
 		/* Extract main-text from HTML page and parse it */
 		TDDocument HTMLdoc = null;
@@ -51,36 +53,49 @@ public class CoreExample {
 
 		HTMLdoc = FlProcessor.parseDocumentGTSentences(HTMLdoc, languageOfHTMLdoc);
 
-		/* Try different summarization methods that return a map with key a sentence Annotation instance and value the relevance score assigned to that sentence
-		 * List of summarization methods available - in the class: edu.upf.taln.textdigester.summarizer.SummarizationMethodENUM */
+		/* Try different summarization methods; each one of them returns a map with as key a sentence gate.Annotation instance and 
+		 * as value the relevance score assigned to that sentence (a sentence with an higher relevance score is more suitable to 
+		 * be included in an extractive summary of the initial text).
+		 * The documents to summarize and the related textual annotations are represented by means of the GATE textual annotation 
+		 * data model - https://gate.ac.uk/sale/tao/splitch5.html - https://gate.ac.uk/releases/latest/doc/javadoc/. 
+		 * List of summarization methods available - in the enumeration: edu.upf.taln.textdigester.summarizer.SummarizationMethodENUM */
 		
 		try {
-
-			// Summarization method: Centroid_TFIDF
+			/* By means of the ConfigurableSummarizer.summarize static method it is possible to invoke the different summarization methods 
+			 * implemented by TextDigester. 
+			 */
+			
+			// Summarization method: Centroid_TFIDF - represent sentences by means of their TF-IDF vectors. Compute the centroid of all sentence 
+			// TF-IDF vectors and rank sentences with respect to their cosine similarity to the centorid vector.
 			Map<Annotation, Double> orderedSentences_Centroid_TFIDF = ConfigurableSummarizer.summarize(HTMLdoc, languageOfHTMLdoc, SummarizationMethodENUM.Centroid_TFIDF);
 
-			// Summarization method: Centroid_EMBED
+			// Summarization method: Centroid_EMBED represent sentences by means of their EMBEDDING vectors (computed by means of Doc2Vec implementation of Deeplearning4j).
+			// Compute the centroid of all sentence EMBEDDING vectors and rank sentences with respect to their cosine similarity to the centorid vector.
 			Map<Annotation, Double> orderedSentences_Centroid_EMBED = ConfigurableSummarizer.summarize(HTMLdoc, languageOfHTMLdoc, SummarizationMethodENUM.Centroid_EMBED);
 
-			// Summarization method: TextRank_TFIDF
+			// Summarization method: TextRank_TFIDF - Execute the TextRank algorithm (https://web.eecs.umich.edu/~mihalcea/papers/mihalcea.emnlp04.pdf) over the sentences
+			// by computing the similarity among sentences relying on the cosine similarity of the respective TF-IDF vectors.
 			Map<Annotation, Double> orderedSentences_TextRank_TFIDF = ConfigurableSummarizer.summarize(HTMLdoc, languageOfHTMLdoc, SummarizationMethodENUM.LexRank_TFIDF);
 
-			// Summarization method: TextRank_EMBED
+			// Summarization method: TextRank_EMBED - Execute the TextRank algorithm (https://web.eecs.umich.edu/~mihalcea/papers/mihalcea.emnlp04.pdf) over the sentences
+			// by computing the similarity among sentences relying on the cosine similarity of the respective EMBEDDING vectors (computed by means of Doc2Vec implementation 
+			// of Deeplearning4j).
 			Map<Annotation, Double> orderedSentences_TextRank_EMBED = ConfigurableSummarizer.summarize(HTMLdoc, languageOfHTMLdoc, SummarizationMethodENUM.LexRank_EMBED);
 
-			// Summarization method: FirstSim
+			// Summarization method: FirstSim - Rank the sentences with respect to their similarity to the first sentence of the document by computing the similarity 
+			// among sentences relying on the cosine similarity of the respective TF-IDF vec
 			Map<Annotation, Double> orderedSentences_FirstSim = ConfigurableSummarizer.summarize(HTMLdoc, languageOfHTMLdoc, SummarizationMethodENUM.FirstSim);
 
-			// Summarization method: TFscore
+			// Summarization method: TFscore - Rank sentences with respect to the sum of their TF scores
 			Map<Annotation, Double> orderedSentences_TFscore = ConfigurableSummarizer.summarize(HTMLdoc, languageOfHTMLdoc, SummarizationMethodENUM.TFscore);
 
-			// Summarization method: Centroid_TFIDF_SUMMA
+			// Summarization method: Centroid_TFIDF_SUMMA - Rank sentences with respect to the sum of their TF scores
 			Map<Annotation, Double> orderedSentences_Centroid_TFIDF_SUMMA = ConfigurableSummarizer.summarize(HTMLdoc, languageOfHTMLdoc, SummarizationMethodENUM.Centroid_TFIDF_SUMMA);
 
-			// Summarization method: Position
+			// Summarization method: Position - Rank sentences with respect to their position in the document to summarize
 			Map<Annotation, Double> orderedSentences_Position = ConfigurableSummarizer.summarize(HTMLdoc, languageOfHTMLdoc, SummarizationMethodENUM.Position);
 
-			// Summarization method: SemScore
+			// Summarization method: SemScore - Rank sentences with respect to their semantic score
 			Map<Annotation, Double> orderedSentences_SemScore = ConfigurableSummarizer.summarize(HTMLdoc, languageOfHTMLdoc, SummarizationMethodENUM.SemScore);
 
 			// Print the text of one of these summaries

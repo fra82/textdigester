@@ -10,10 +10,6 @@ import java.io.IOException;
 import java.io.OutputStreamWriter;
 import java.io.UnsupportedEncodingException;
 import java.io.Writer;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Map;
-import java.util.Map.Entry;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -21,15 +17,11 @@ import org.slf4j.LoggerFactory;
 import edu.upf.taln.textdigester.importer.multing.MultilingImport;
 import edu.upf.taln.textdigester.model.TDDocument;
 import edu.upf.taln.textdigester.resource.freeling.FlProcessor;
-import edu.upf.taln.textdigester.resource.gate.GtUtils;
 import edu.upf.taln.textdigester.setting.LangENUM;
 import edu.upf.taln.textdigester.setting.PropertyManager;
-import edu.upf.taln.textdigester.setting.exception.TextDigesterException;
-import edu.upf.taln.textdigester.summarizer.method.SentenceSimilarityENUM;
-import edu.upf.taln.textdigester.summarizer.method.lexrank.LexRankSummarizer;
-import gate.Annotation;
 
 /**
+ * Parse a document with language detection
  * 
  * @author Francesco Ronzano
  *

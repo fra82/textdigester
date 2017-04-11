@@ -20,12 +20,12 @@ import org.slf4j.LoggerFactory;
 import com.google.common.base.Strings;
 
 import edu.upf.taln.textdigester.resource.dl4j.Doc2vecModelUtil;
-import edu.upf.taln.textdigester.resource.freeling.FlProcessor;
 import edu.upf.taln.textdigester.setting.LangENUM;
 import edu.upf.taln.textdigester.setting.PropertyManager;
 import edu.upf.taln.textdigester.setting.exception.TextDigesterException;
 
 /**
+ * Wikipedia sentence embedding Utility Class
  * 
  * @author Francesco Ronzano
  *

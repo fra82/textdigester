@@ -12,6 +12,7 @@ import java.io.InputStreamReader;
 import java.io.UnsupportedEncodingException;
 
 /**
+ * Utility class for document import
  * 
  * @author Francesco Ronzano
  *

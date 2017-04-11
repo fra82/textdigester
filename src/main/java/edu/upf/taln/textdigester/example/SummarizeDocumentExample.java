@@ -33,6 +33,7 @@ import edu.upf.taln.textdigester.summarizer.summa.CallSUMMA;
 import gate.Annotation;
 
 /**
+ * How to summarize a document
  * 
  * @author Francesco Ronzano
  *

@@ -4,6 +4,7 @@
 package edu.upf.taln.textdigester.setting;
 
 /**
+ * Languages supported by TextDigester
  * 
  * @author Francesco Ronzano
  *

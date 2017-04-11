@@ -16,6 +16,7 @@ import edu.upf.taln.textdigester.setting.exception.TextDigesterException;
 import gate.Annotation;
 
 /**
+ * Utility methods to compute sentence embedding
  * 
  * @author Francesco Ronzano
  *
@@ -24,6 +25,13 @@ public class EmbeddingVectorWiki {
 	
 	private static final Logger logger = LoggerFactory.getLogger(TFIDFVectorWiki.class);
 	
+	/**
+	 * 
+	 * @param ann sentence annotation
+	 * @param doc document including the sentence
+	 * @param lang language of the document
+	 * @return
+	 */
 	public static INDArray computeEmbeddingVect(Annotation ann, TDDocument doc, LangENUM lang) {
 		
 		String sentence = GtUtils.getTextOfAnnotation(ann, doc.getGATEdoc());

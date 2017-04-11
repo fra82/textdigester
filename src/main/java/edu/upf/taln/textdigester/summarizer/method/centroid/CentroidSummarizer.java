@@ -1,3 +1,6 @@
+/**
+ * TextDigester: Document Summarization Framework
+ */
 package edu.upf.taln.textdigester.summarizer.method.centroid;
 
 import java.util.HashMap;
@@ -24,7 +27,7 @@ import gate.AnnotationSet;
 import gate.Document;
 
 /**
- * TO COMPLETE
+ * Implementation of single-document centroid summarizer
  * 
  * @author Francesco Ronzano
  *

@@ -17,6 +17,7 @@ import org.apache.commons.lang.exception.ExceptionUtils;
 import org.slf4j.Logger;
 
 /**
+ * Utility class
  * 
  * @author Francesco Ronzano
  *

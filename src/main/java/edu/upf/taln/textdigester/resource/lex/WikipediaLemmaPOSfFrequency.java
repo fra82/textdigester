@@ -20,6 +20,7 @@ import edu.upf.taln.textdigester.setting.PropertyManager;
 import edu.upf.taln.textdigester.setting.exception.TextDigesterException;
 
 /**
+ * Wikipedia lemma document frequency Utility Class
  * 
  * @author Francesco Ronzano
  *

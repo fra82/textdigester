@@ -25,6 +25,7 @@ import gate.Document;
 import gate.Gate;
 
 /**
+ * Gate Utility Class
  * 
  * @author Francesco Ronzano
  *

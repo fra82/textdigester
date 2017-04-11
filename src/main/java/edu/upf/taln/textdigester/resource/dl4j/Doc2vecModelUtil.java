@@ -44,6 +44,7 @@ import gate.Document;
 import gate.Factory;
 
 /**
+ * Deeplearning4j Utility Class
  * 
  * @author Francesco Ronzano
  *

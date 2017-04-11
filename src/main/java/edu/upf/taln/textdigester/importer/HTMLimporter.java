@@ -13,6 +13,7 @@ import edu.upf.taln.textdigester.model.TDDocument;
 import edu.upf.taln.textdigester.setting.exception.TextDigesterException;
 
 /**
+ * Import an HTML page to summarize from its URL by removing boilerplate.
  * 
  * @author Francesco Ronzano
  *

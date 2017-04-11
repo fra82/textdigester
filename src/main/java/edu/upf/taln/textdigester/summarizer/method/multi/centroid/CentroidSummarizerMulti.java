@@ -1,3 +1,6 @@
+/**
+ * TextDigester: Document Summarization Framework
+ */
 package edu.upf.taln.textdigester.summarizer.method.multi.centroid;
 
 import java.util.ArrayList;
@@ -26,7 +29,7 @@ import gate.AnnotationSet;
 import gate.Document;
 
 /**
- * TO COMPLETE
+ * Implementation of multi-document centroid summarizer
  * 
  * @author Francesco Ronzano
  *
@@ -41,8 +44,6 @@ public class CentroidSummarizerMulti implements ExtractiveSummarizerMulti {
 
 	private TFIDFVectorWiki TFIDFcomput;
 	
-
-
 	public CentroidSummarizerMulti(LangENUM langIN, SentenceSimilarityENUM simMethod) throws TextDigesterException {
 		if(langIN == null) {
 			throw new TextDigesterException("Specify a language to load a tfidf word list and stopword list.");

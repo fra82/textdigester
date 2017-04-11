@@ -25,7 +25,6 @@ import org.apache.velocity.tools.ToolManager;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import edu.upf.taln.textdigester.CoreExample;
 import edu.upf.taln.textdigester.model.TDDocument;
 import edu.upf.taln.textdigester.resource.freeling.FlProcessor;
 import edu.upf.taln.textdigester.resource.gate.GtUtils;
@@ -38,6 +37,9 @@ import edu.upf.taln.textdigester.summarizer.util.SummaryUtil;
 import gate.Annotation;
 
 /**
+ * Servlet to summarize a page by invoking TextDigester methods. It is possible to provide a text to summarize,
+ * select a summarization method, the language of the text and the length of the summary to generate in percentage 
+ * of the original document. 
  * 
  * @author Francesco Ronzano
  *
@@ -55,7 +57,7 @@ public class SummarizePage extends HttpServlet {
 		// Velocity engine initialization
 		try {
 
-			File outputDirVelocity = new File("/home/francesco/Desktop/NLP_HACHATHON_4YFN/VELOCITY", "velocity.log");
+			File outputDirVelocity = new File("/local/path/where/to/store/log/VELOCITY", "velocity.log");
 			URL toolboxConfigURL = outputDirVelocity.getClass().getResource("/velocity/velocity-tools.xml");
 			File toolboxConfigFile = new File(toolboxConfigURL.toURI());
 			velocityToolManager.configure(toolboxConfigFile.getAbsolutePath());
@@ -285,7 +287,7 @@ public class SummarizePage extends HttpServlet {
 						orderedSentencesString = MapUtil.sortByValue(orderedSentencesString);
 						
 						context_cont.put("orderedSentencesString", orderedSentencesString);
-						context_cont.put("summaryGenerated", "true");
+						context_cont.put("summaryGenerated", "false");
 					} catch(Exception e) {
 						e.printStackTrace();
 						logger.warn("Error while selecting sentences - " + e.getMessage());

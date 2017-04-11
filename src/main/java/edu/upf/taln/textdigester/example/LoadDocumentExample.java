@@ -15,6 +15,7 @@ import edu.upf.taln.textdigester.model.TDDocument;
 import edu.upf.taln.textdigester.setting.PropertyManager;
 
 /**
+ * How to load a document
  * 
  * @author Francesco Ronzano
  *

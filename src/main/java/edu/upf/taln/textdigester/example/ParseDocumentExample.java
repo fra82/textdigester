@@ -25,6 +25,7 @@ import edu.upf.taln.textdigester.setting.PropertyManager;
 import gate.AnnotationSet;
 
 /**
+ * How to parse documents
  * 
  * @author Francesco Ronzano
  *

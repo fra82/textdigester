@@ -21,7 +21,7 @@ import edu.upf.taln.textdigester.setting.PropertyManager;
 import edu.upf.taln.textdigester.setting.exception.TextDigesterException;
 
 /**
- * 
+ * StopWord loader Utility Class
  * @author Francesco Ronzano
  *
  */

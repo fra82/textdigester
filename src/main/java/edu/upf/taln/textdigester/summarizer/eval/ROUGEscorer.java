@@ -20,6 +20,7 @@ import gate.Document;
 import gate.util.InvalidOffsetException;
 
 /**
+ * ROUGE summary evaluation utility
  * 
  * @author Francesco Ronzano
  *
