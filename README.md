@@ -34,7 +34,7 @@ Before using TextDigester in your Java application you need to:
 In order to import TextDigester in your Java program:
 
 * Clone and compile TextDigester Maven project  
-* Download the resource folder and the property file of TextDigester from http://www.backingdata.org/textdigester/TEXTDIGESTER_RESOURCES_v_0_0_2.tar.gz (TAR.GZ) or from http://www.backingdata.org/textdigester/TEXTDIGESTER_RESOURCES_v_0_0_2.zip (ZIP) 
+* Download the resource folder of TextDigester from http://www.backingdata.org/textdigester/TEXTDIGESTER_RESOURCES_v_0_0_2.tar.gz (TAR.GZ) or from http://www.backingdata.org/textdigester/TEXTDIGESTER_RESOURCES_v_0_0_2.zip (ZIP) 
 * Download the property file of TextDigester from http://www.backingdata.org/textdigester/TextDigesterConfig.properties
 * Modify the property file of TextDigester by specifying the local path to the resource folder of TextDigester (downloaded in the previous tar.gz file) and the local path of your GATE installation (GAE home and GATE plugin directories)
 
